@@ -1,0 +1,23 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+transformers = "*"
+dgl = "*"
+allennlp-models = "*"
+allennlp = "*"
+tqdm = "*"
+pytorch-lightning = "*"
+tokenizers = "*"
+numpy = "*"
+rdflib = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

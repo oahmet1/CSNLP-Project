@@ -21,21 +21,16 @@ The official PyTorch implementation for our paper:
 ## Environment
 
 ```bash
-conda create -n sift python=3.7.7
-conda activate sift
-pip install -r requirements.txt # see below
+pipenv install
 ```
 
-However, doing this directly will fail because `transformers==2.11.0` requires `tokenizers==0.7.0`, but we used `tokenizers==0.8.0rc1`, which in practice is compatible. So you can either manually install all dependecies so that `pip` doesn't complain, or remove `tokenizers` from `requirements.txt` and manually `pip install tokenizers==0.8.0rc1` after `pip install -r requirements.txt` succeeds.
-
-You may need to install a specific CUDA version of PyTorch and/or DGL. See their repos for instructions. For example:
+To install Python 3.9 on Ubuntu use
 
 ```bash
-pip install dgl-cu102==0.4.3.post2 # change to your CUDA version
-conda install -c anaconda cudatoolkit=10.2 # may be necessary for dgl-cuda to work; change to your CUDA version
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt install python3.9 python3.9-dev
 ```
-
-We do not officially support CUDA>=11.0, but see [this issue](https://github.com/ZhaofengWu/SIFT/issues/3) for relevant discussion.
 
 ## Pretrained Models
 
