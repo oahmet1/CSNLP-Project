@@ -42,7 +42,6 @@ Download GLUE data using [this gist](https://gist.github.com/W4ngatang/60c2bdb54
 
 ```bash
 cd data
-wget https://gist.githubusercontent.com/W4ngatang/60c2bdb54d156a41194446737ce03e2e/raw/1502038877f6a88c225a34450793fbc3ea87eaba/download_glue_data.py
 python download_glue_data.py
 ```
 

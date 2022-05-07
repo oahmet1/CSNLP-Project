@@ -16,6 +16,11 @@ pytorch-lightning = "*"
 tokenizers = "*"
 numpy = "*"
 rdflib = "*"
+notebook = "*"
+jupyter = "*"
+amrlib = "*"
+penman = "*"
+cached-property = "*"
 
 [dev-packages]
 
