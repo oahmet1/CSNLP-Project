@@ -21,6 +21,8 @@ jupyter = "*"
 amrlib = "*"
 penman = "*"
 cached-property = "*"
+unidecode = "*"
+datasets = "*"
 
 [dev-packages]
 
