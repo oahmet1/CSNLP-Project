@@ -144,7 +144,9 @@ def main():
     model = RGCNSemanticEncoder(args)
 
     checkpoint_callback = ModelCheckpointCallback(
-        filepath=os.path.join(args.output_dir, f'{{epoch}}_{{{model.metric_to_watch}:.4f}}'),
+        dirpath=args.output_dir,
+        filename=f'{{epoch}}_{{{model.metric_to_watch}:.4f}}',
+        # filepath=os.path.join(args.output_dir, f'{{epoch}}_{{{model.metric_to_watch}:.4f}}'),
         monitor=model.metric_to_watch,
         mode=model.metric_watch_mode,
         save_top_k=1,
@@ -154,7 +156,8 @@ def main():
         accumulate_grad_batches=args.gradient_accumulation_steps,
         gpus=args.gpus,
         max_epochs=args.num_train_epochs,
-        early_stop_callback=False,
+        # early_stop_callback=False,
+        # early_stopping_callback=False,
         gradient_clip_val=args.max_grad_norm,
         default_root_dir=args.output_dir,
         checkpoint_callback=checkpoint_callback,
