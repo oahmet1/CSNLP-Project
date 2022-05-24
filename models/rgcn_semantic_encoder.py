@@ -76,8 +76,6 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
         rgcn_output = None
         if self.use_semantic_graph:
             batch_size = input_ids.shape[0]
-            print("sdkfkjsdkf",graphs_a.num_nodes())
-            print('11111',graphs_a.nodes)
             graphs_a_empty = graphs_a.num_nodes() == 0
             if not graphs_a_empty:
                 node_embs_a, node_emb_mask_a = self.pool_node_embeddings(last_layers, sent_a_masks, gdata_a, graphs_a.batch_num_nodes)

@@ -6,6 +6,7 @@ from transformers import get_linear_schedule_with_warmup
 from transformers import AdamW
 
 
+# noinspection PyInterpreter
 class BaseLightningModel(pl.LightningModule):
     def __init__(self, args):
         super().__init__()
@@ -56,20 +57,14 @@ class BaseLightningModel(pl.LightningModule):
         self.opt = optimizer
         return [optimizer]
 
-    def optimizer_step(
-        self,
-        epoch,
-        batch_idx,
-        optimizer,
-        optimizer_idx,
-        second_order_closure=None,
-        on_tpu=False,
-        using_native_amp=False,
-        using_lbfgs=False,
-    ):
+    def optimizer_step(self, epoch, batch_idx, optimizer, optimizer_idx=0, optimizer_closure=None, on_tpu=False,
+                       using_native_amp=False, using_lbfgs=False):
+
         assert not on_tpu, "No TPU support yet"
-        optimizer.step()
-        optimizer.zero_grad()
+
+        optimizer.step(closure=optimizer_closure)
+        # optimizer.step()
+        # optimizer.zero_grad()
         self.lr_scheduler.step()
 
     def get_tqdm_dict(self):
@@ -88,7 +83,9 @@ class BaseLightningModel(pl.LightningModule):
 
         if has_labels:
             targets = np.concatenate([x["target"] for x in outputs], axis=0)
+
             return {**{"val_loss": val_loss_mean}, **self.compute_metrics(preds, targets)}
+
         else:
             return preds, logits
 
@@ -111,7 +108,12 @@ class BaseLightningModel(pl.LightningModule):
             logs = self._eval_epoch_end(outputs, has_labels=True)
         self.validation_results = dict(logs)
         logs.update({"log": {**logs}, "progress_bar": {**logs}})
-        return logs
+
+        # a fix
+        for key, value in logs.items():
+            self.log(key, value)
+        # no need to log
+        # return logs
 
     def test_epoch_end(self, outputs):
         if self.has_secondary_split:

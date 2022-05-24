@@ -3,12 +3,18 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://data.dgl.ai/wheels/repo"
+verify_ssl = true
+name = "dgl"
+
+
+
 [packages]
 torch = "*"
 torchvision = "*"
 torchaudio = "*"
 transformers = "*"
-dgl = "*"
 allennlp-models = "*"
 allennlp = "*"
 tqdm = "*"
@@ -23,8 +29,13 @@ cached-property = "*"
 unidecode = "*"
 datasets = "*"
 rdflib = "~=5.0"
+dgl-cu113 = {file="https://data.dgl.ai/wheels/dgl_cu115-0.8.1-cp39-cp39-manylinux1_x86_64.whl"}
+dglgo = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.9"
+
+
+

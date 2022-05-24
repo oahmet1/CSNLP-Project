@@ -44,6 +44,8 @@ class SemanticEncoder(BaseLightningModel):
 
         args.task = args.task.lower()
 
+        self.num_workers = args.numworkers
+
         self.use_semantic_graph = args.formalism is not None
         self.formalism = args.formalism
 
@@ -105,7 +107,6 @@ class SemanticEncoder(BaseLightningModel):
         device = last_layers.device
         bsz, max_sent_len, max_n_nodes = wpidx2graphid.shape
         emb_dim = last_layers.shape[-1]
-        print(f"???????????????' {wpidx2graphid.shape[-1]}", batch_num_nodes)
         assert max(batch_num_nodes) == wpidx2graphid.shape[-1]
 
         # the following logic happens to work if the graph is empty, in which case its sentence_end is guaranteed to be 1 (exclusive)
@@ -244,6 +245,8 @@ class SemanticEncoder(BaseLightningModel):
                 self.transformer.tokenizer.padding_side,
                 self.output_mode,
             ),
+            # TODO: we added this but not sure if we should!
+            num_workers=self.num_workers
         )
 
         # pytorch-lightning as of 0.8.0rc1 adds DistributedSampler to all dataloaders, but we only
@@ -387,6 +390,14 @@ class SemanticEncoder(BaseLightningModel):
             type=str,
             choices=ACT2FN.keys(),
             help=f"The activation function to use.",
+        )
+
+        parser.add_argument(
+            "--numworkers",
+            default=0,
+            type=int,
+            # choices=ACT2FN.keys(),
+            help=f"How many workers the Dataloaders create",
         )
 
         return parser

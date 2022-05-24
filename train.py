@@ -33,7 +33,6 @@ class LoggingCallback(pl.Callback):
 
             metrics = trainer.callback_metrics
             # Log results
-            print('sdkoahfklsdjfklasdjfklasdjf', metrics)
             for key in sorted(metrics):
                 if key not in ["log", "progress_bar"]:
                     logger.info("{} = {}".format(key, str(metrics[key])))
