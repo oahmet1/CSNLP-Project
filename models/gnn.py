@@ -17,7 +17,7 @@ class GNN(nn.Module):
         raise NotImplementedError
 
     def forward(self, graph, initial_embeddings):
-        if len(initial_embeddings) != len(graph.nodes):
+        if len(initial_embeddings) != graph.num_nodes():
             raise ValueError('Node embedding initialization shape mismatch')
         h = initial_embeddings
         for layer in self.layers:

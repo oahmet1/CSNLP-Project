@@ -25,7 +25,7 @@ class LoggingCallback(pl.Callback):
         self.best_dev_metrics = None
 
     def on_validation_end(self, trainer, pl_module):
-        if pl_module.trainer.proc_rank <= 0:
+        if pl_module.trainer.global_rank <= 0:
             logger.info("")
             logger.info("***** Validation results *****")
 
@@ -33,6 +33,7 @@ class LoggingCallback(pl.Callback):
 
             metrics = trainer.callback_metrics
             # Log results
+            print('sdkoahfklsdjfklasdjfklasdjf', metrics)
             for key in sorted(metrics):
                 if key not in ["log", "progress_bar"]:
                     logger.info("{} = {}".format(key, str(metrics[key])))

@@ -100,10 +100,12 @@ class SemanticEncoder(BaseLightningModel):
             node_embs: (bsz, max_num_nodes, emb_dim)
             node_embeddings_mask: (bsz, max_num_nodes)
         """
+        batch_num_nodes = batch_num_nodes()
         wpidx2graphid = gdata['wpidx2graphid']  # (bsz, max_sent_len, max_n_nodes)
         device = last_layers.device
         bsz, max_sent_len, max_n_nodes = wpidx2graphid.shape
         emb_dim = last_layers.shape[-1]
+        print(f"???????????????' {wpidx2graphid.shape[-1]}", batch_num_nodes)
         assert max(batch_num_nodes) == wpidx2graphid.shape[-1]
 
         # the following logic happens to work if the graph is empty, in which case its sentence_end is guaranteed to be 1 (exclusive)
@@ -254,9 +256,12 @@ class SemanticEncoder(BaseLightningModel):
 
         return dataloader
 
-    def transfer_batch_to_device(self, batch, device):
+    def transfer_batch_to_device(self, batch, device, dataloader_idx):
         # DGLGraph's .to method as of 0.4.3.post2 doesn't take the non_blocking arg
         # which pytorch-lightning passes. So we need to customize this behavior
+
+        # dataloader_idx not used
+
         assert isinstance(batch, list)
         return [
             (

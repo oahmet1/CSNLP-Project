@@ -15,7 +15,6 @@ tqdm = "*"
 pytorch-lightning = "*"
 tokenizers = "*"
 numpy = "*"
-rdflib = "*"
 notebook = "*"
 jupyter = "*"
 amrlib = "*"
@@ -23,6 +22,7 @@ penman = "*"
 cached-property = "*"
 unidecode = "*"
 datasets = "*"
+rdflib = "~=5.0"
 
 [dev-packages]
 

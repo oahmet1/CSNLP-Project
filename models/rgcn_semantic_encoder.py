@@ -60,19 +60,25 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
         if sent_b_masks is not None and attention_mask is not None:
             assert (sent_b_masks & attention_mask == sent_b_masks).all()
 
-        last_layers, pooled_output = self.transformer(
+        model_output = self.transformer(
             input_ids=input_ids,
             attention_mask=attention_mask.long() if attention_mask is not None else None,
             token_type_ids=token_type_ids,
         )
-        transformer_output = self.dropout(pooled_output)  # (bsz, transformer_dim)
+
+        # TODO: check if this is supposed to be last_layers, versus last_hidden_state
+        last_layers, pooler_output = model_output['last_hidden_state'], model_output['pooler_output']
+        # print(model_output)
+
+        transformer_output = self.dropout(pooler_output)  # (bsz, transformer_dim)
 
         # rgcn
         rgcn_output = None
         if self.use_semantic_graph:
             batch_size = input_ids.shape[0]
-
-            graphs_a_empty = len(graphs_a.nodes) == 0
+            print("sdkfkjsdkf",graphs_a.num_nodes())
+            print('11111',graphs_a.nodes)
+            graphs_a_empty = graphs_a.num_nodes() == 0
             if not graphs_a_empty:
                 node_embs_a, node_emb_mask_a = self.pool_node_embeddings(last_layers, sent_a_masks, gdata_a, graphs_a.batch_num_nodes)
                 node_embs_a = self.propagate_graph(graphs_a, node_embs_a, node_emb_mask_a)
