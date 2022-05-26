@@ -14,6 +14,7 @@ reload(logging)
 
 from models import RGCNSemanticEncoder
 
+# os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +33,12 @@ class LoggingCallback(pl.Callback):
             assert pl_module.metric_watch_mode in {'max', 'min'}
 
             metrics = trainer.callback_metrics
+            print(f"on_validation_end - metrics: {metrics} \n\n\n")
+
             # Log results
             for key in sorted(metrics):
+                print(f"\ncurrent key in metrics: {key}\n")
+
                 if key not in ["log", "progress_bar"]:
                     logger.info("{} = {}".format(key, str(metrics[key])))
 
@@ -49,9 +54,25 @@ class LoggingCallback(pl.Callback):
                             k: v for k, v in metrics.items() if k not in {"log", "progress_bar", "loss", "val_loss", "rate", "epoch"}
                         }
 
+                    # elif (
+                    #         (pl_module.metric_watch_mode == 'max' and metrics[key] > self.best_dev_metric)
+                    #         or (pl_module.metric_watch_mode == 'min' and metrics[key] < self.best_dev_metric)
+                    # ):
+                    #     self.best_epoch = trainer.current_epoch
+                    #     self.best_dev_metric = metrics[key]
+                    #     self.best_dev_metrics = {
+                    #         k: v for k, v in metrics.items() if
+                    #         k not in {"log", "progress_bar", "loss", "val_loss", "rate", "epoch"}
+                    #     }
+
             logger.info(f"best_epoch = {self.best_epoch}")
-            for key, value in sorted(self.best_dev_metrics.items()):
-                logger.info(f"best_{key} = {value}")
+            # TODO: THIS IS NOT A FIX THIS IS A WTFFFFFFFFFFFFFFF WHY DOES IT NOT WORK TEST
+            if self.best_dev_metrics is not None:
+                for key, value in sorted(self.best_dev_metrics.items()):
+                    logger.info(f"best_{key} = {value}")
+
+            # for key, value in sorted(self.best_dev_metrics.items()):
+            #                     logger.info(f"best_{key} = {value}")
 
 
 class ModelCheckpointCallback(pl.callbacks.ModelCheckpoint):

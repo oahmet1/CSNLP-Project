@@ -82,7 +82,8 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
                 node_embs_a = self.propagate_graph(graphs_a, node_embs_a, node_emb_mask_a)
 
             if self.is_sentence_pair_task:
-                graphs_b_empty = len(graphs_b.nodes) == 0
+                # graphs_b_empty = len(graphs_b.nodes) == 0
+                graphs_b_empty = graphs_b.num_nodes() == 0
                 if not graphs_b_empty:
                     node_embs_b, node_emb_mask_b = self.pool_node_embeddings(last_layers, sent_b_masks, gdata_b, graphs_b.batch_num_nodes)
                     node_embs_b = self.propagate_graph(graphs_b, node_embs_b, node_emb_mask_b)

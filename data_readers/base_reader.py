@@ -13,6 +13,7 @@ import torch
 from tqdm import tqdm
 
 from .rdf2dgl import relations_in, rdf2dgl
+from .amr2dgl import amr_relations_in, amr2dgl
 
 
 logger = logging.getLogger(__name__)
@@ -92,11 +93,41 @@ def all_rdf_to_dgl(all_split_names, all_rdf_graphs, all_metadata, bidirectional=
     return graphs, relation2id, len(relations) * (2 if bidirectional else 1)
 
 
+def all_amr_to_dgl(all_split_names, all_amr_graphs, bidirectional=True):
+    # what we have to return:
+    # graphs, relation2id, num_relations = get_graphs() -> see semantic_encoder
+
+    assert len(all_split_names) == len(all_amr_graphs)
+
+    # TODO: amr_relations_in TO BE IMPLEMENTED
+    #  and/or need to think if we want to do this the same way?
+    relations = amr_relations_in(_flatten(all_amr_graphs))
+    print(f'Relations count: {len(relations)}')
+    relation2id = {rel: i for i, rel in enumerate(sorted(relations))}
+
+    graphs = {}
+
+    for split, amr_graphs in zip(all_split_names, all_amr_graphs):
+        graphs[split] = []
+        for amr_graph in amr_graphs:
+            graph = amr2dgl(
+                amr_graph, relation2id, bidirectional=bidirectional
+            )
+            graphs[split].append(graph)
+
+    return graphs, relation2id, len(relations) * (2 if bidirectional else 1)
+
+
 def get_graphs(
     data_dir,
     formalism,
     has_secondary_split=False,
 ):
+
+    all_split_names = ['train', 'dev', 'test']
+    if has_secondary_split:
+        all_split_names.extend(['dev2', 'test2'])
+
     train_rdf_graphs = pickle.load(open(os.path.join(data_dir, f'train.{formalism}.rdf'), 'rb'))
     dev_rdf_graphs = pickle.load(open(os.path.join(data_dir, f'dev.{formalism}.rdf'), 'rb'))
     test_rdf_graphs = pickle.load(open(os.path.join(data_dir, f'test.{formalism}.rdf'), 'rb'))
@@ -104,31 +135,37 @@ def get_graphs(
         dev2_rdf_graphs = pickle.load(open(os.path.join(data_dir, f'dev2.{formalism}.rdf'), 'rb'))
         test2_rdf_graphs = pickle.load(open(os.path.join(data_dir, f'test2.{formalism}.rdf'), 'rb'))
 
-    train_metadata = pickle.load(open(os.path.join(data_dir, f'train.{formalism}.metadata'), 'rb'))
-    dev_metadata = pickle.load(open(os.path.join(data_dir, f'dev.{formalism}.metadata'), 'rb'))
-    test_metadata = pickle.load(open(os.path.join(data_dir, f'test.{formalism}.metadata'), 'rb'))
-    if has_secondary_split:
-        dev2_metadata = pickle.load(open(os.path.join(data_dir, f'dev2.{formalism}.metadata'), 'rb'))
-        test2_metadata = pickle.load(open(os.path.join(data_dir, f'test2.{formalism}.metadata'), 'rb'))
-
-    assert len(train_rdf_graphs) == len(train_metadata)
-    assert len(dev_rdf_graphs) == len(dev_metadata)
-    assert len(test_rdf_graphs) == len(test_metadata)
-    if has_secondary_split:
-        assert len(dev2_rdf_graphs) == len(dev2_metadata)
-        assert len(test2_rdf_graphs) == len(test2_metadata)
-
-    all_split_names = ['train', 'dev', 'test']
-    if has_secondary_split:
-        all_split_names.extend(['dev2', 'test2'])
     all_rdf_graphs = [train_rdf_graphs, dev_rdf_graphs, test_rdf_graphs]
     if has_secondary_split:
         all_rdf_graphs.extend([dev2_rdf_graphs, test2_rdf_graphs])
-    all_metadata = [train_metadata, dev_metadata, test_metadata]
-    if has_secondary_split:
-        all_metadata.extend([dev2_metadata, test2_metadata])
 
-    return all_rdf_to_dgl(all_split_names, all_rdf_graphs, all_metadata)
+    if formalism != "amr":
+        # TODO: we don't have an additional {}.metadata file for the amr case!!!
+
+        train_metadata = pickle.load(open(os.path.join(data_dir, f'train.{formalism}.metadata'), 'rb'))
+        dev_metadata = pickle.load(open(os.path.join(data_dir, f'dev.{formalism}.metadata'), 'rb'))
+        test_metadata = pickle.load(open(os.path.join(data_dir, f'test.{formalism}.metadata'), 'rb'))
+        if has_secondary_split:
+            dev2_metadata = pickle.load(open(os.path.join(data_dir, f'dev2.{formalism}.metadata'), 'rb'))
+            test2_metadata = pickle.load(open(os.path.join(data_dir, f'test2.{formalism}.metadata'), 'rb'))
+
+        # TODO: make sure we do not need these asserts for our case
+        assert len(train_rdf_graphs) == len(train_metadata)
+        assert len(dev_rdf_graphs) == len(dev_metadata)
+        assert len(test_rdf_graphs) == len(test_metadata)
+        if has_secondary_split:
+            assert len(dev2_rdf_graphs) == len(dev2_metadata)
+            assert len(test2_rdf_graphs) == len(test2_metadata)
+
+        all_metadata = [train_metadata, dev_metadata, test_metadata]
+        if has_secondary_split:
+            all_metadata.extend([dev2_metadata, test2_metadata])
+
+        return all_rdf_to_dgl(all_split_names, all_rdf_graphs, all_metadata)
+    else:
+        return all_amr_to_dgl(all_split_names, all_rdf_graphs)
+
+
 
 
 def _spans_overlap(span_a, span_b):

@@ -18,6 +18,7 @@ def convert(task, input_dir, output_dir):
         raise ValueError('Output file already exists.')
 
     processor = processors[task]()
+    print(processor)
     train_examples = processor.get_train_examples(input_dir)
     dev_examples = processor.get_dev_examples(input_dir)
     test_examples = processor.get_test_examples(input_dir)

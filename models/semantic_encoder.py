@@ -102,6 +102,11 @@ class SemanticEncoder(BaseLightningModel):
             node_embs: (bsz, max_num_nodes, emb_dim)
             node_embeddings_mask: (bsz, max_num_nodes)
         """
+
+        #############################################################################################
+        # TODO: adapt this for our case!!!!
+        #############################################################################################
+
         batch_num_nodes = batch_num_nodes()
         wpidx2graphid = gdata['wpidx2graphid']  # (bsz, max_sent_len, max_n_nodes)
         device = last_layers.device
