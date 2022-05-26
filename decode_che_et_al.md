@@ -5,7 +5,7 @@
 3. Convert the dataset into a one sentence per line format with the following command. `${TASK_NAME}` can be `cola`, `mnli`, etc. The output files are `${SPLIT}.lines`.
 
     ```bash
-    python scripts/dataset_to_lines.py ${TASK_NAME} ${DATASET_DIR} ${DATASET_DIR}
+    python scripts/dataset_to_CoNNL_U.py ${TASK_NAME} ${DATASET_DIR} ${DATASET_DIR}
     ```
 
 Example output format (the whitespaces are a tab):

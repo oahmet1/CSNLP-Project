@@ -27,6 +27,17 @@ class PretrainedTransformer(pl.LightningModule):
             cache_dir=cache_dir,
             use_fast=True,
         )
+
+        # print(f"all tokenizer attributes: {dir(self.tokenizer)}")
+        # print()
+        # print(f"tokenizer : {self.tokenizer.max_len_sentences_pair}")
+        # print(f"tokenizer : {self.tokenizer.max_len_single_sentence}")
+        # print(f"tokenizer : {self.tokenizer.max_model_input_sizes}")
+        # print(f"tokenizer : {self.tokenizer.model_max_length}")
+        # print(f"tokenizer : {self.tokenizer.truncation_side}")
+        # print(f"tokenizer : {self.tokenizer.truncate_sequences}")
+
+
         self.model = AutoModel.from_pretrained(
             self.args.model_name_or_path,
             from_tf=bool(".ckpt" in self.args.model_name_or_path),

@@ -114,6 +114,9 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
                 rgcn_output.append(rgcn_output_b)
             rgcn_output = torch.cat(tuple(rgcn_output), dim=-1)
 
+            # TODO
+            # raise NotImplementedError
+
         return transformer_output, rgcn_output
 
     def propagate_graph(self, graph, node_embeddings, node_embeddings_mask):

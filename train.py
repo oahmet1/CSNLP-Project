@@ -163,7 +163,10 @@ def main():
     )
 
     model = RGCNSemanticEncoder(args)
-
+    # TODO: remove
+    # print(model)
+    # exit()
+    ###########
     checkpoint_callback = ModelCheckpointCallback(
         dirpath=args.output_dir,
         filename=f'{{epoch}}_{{{model.metric_to_watch}:.4f}}',

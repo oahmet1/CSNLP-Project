@@ -125,7 +125,10 @@ class SemanticDataset(Dataset):
 
     @staticmethod
     def collate_fn(batch, pad_token, pad_token_segment_id, pad_on_left, output_mode):
+
+        # TODO: do they set the max_length to the current max length in the batch
         max_length = max(len(example[0]) for example in batch)
+        # print(f"semantic dataset -> max_length: {max_length}")
         for example in batch:
             SemanticDataset._pad(example, pad_token, pad_token_segment_id, pad_on_left, max_length)
             SemanticDataset._tensorize(example, output_mode)
@@ -133,6 +136,10 @@ class SemanticDataset(Dataset):
         # input_ids, attention_mask, token_type_ids, sent_a_masks, sent_b_masks, labels, graphs_a, graphs_b
         n_fields_before_graphs = 6
         field_is_present = [field is not None for field in batch[0]]
+
+        # print(f"semantic dataset -> field_is_present: {field_is_present}")
+        # print(f"semantic dataset -> fields: {[field for field in batch[0]]}")
+        # exit()
         for example in batch:  # sanity check
             assert all(field_is_present[i] == (field is not None) for i, field in enumerate(example))
 

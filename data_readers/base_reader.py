@@ -260,12 +260,21 @@ def _calc_wpidx2graphid(anchors, wp_offsets):
     Returns:
         List[List[bool]]
     """
+
+    ######
+    # TODO: REDO THIS FOR OUR CASE!
+    ######
+
     wpidx2graphid = [[False] * len(anchors) for _ in range(len(wp_offsets))]
     # There's probably an O(n) way to do this but the lists are usually short anyway
     for wp_idx, wp_span in enumerate(wp_offsets):
         for graph_id, node_span in enumerate(anchors):
             if node_span is not None and _spans_overlap(wp_span, node_span):
                 wpidx2graphid[wp_idx][graph_id] = True
+                # print('uuuuu ', anchors, wp_span, node_span)
+
+
+
 
     return wpidx2graphid
 
@@ -309,19 +318,26 @@ def convert_examples_to_features(
         if example.text_b is not None:
             example.text_b = example.text_b.strip()
 
+    # print(f"\nconvert_examples_to_features -> examples type: {type(examples)}\n")
+    # print(f"\nconvert_examples_to_features -> examples: {examples}\n")
+    # print("sep token id", (tokenizer.sep_token_id))
     batch_encoding = tokenizer.batch_encode_plus(
         [(example.text_a, example.text_b) if example.text_b is not None else example.text_a for example in examples],
         max_length=max_length,
         return_offsets_mapping=True,
     )
     all_special_token_ids = {tokenizer.bos_token_id, tokenizer.eos_token_id, tokenizer.sep_token_id, tokenizer.cls_token_id}
-
+    # print(f"\nconvert_examples_to_features -> all special token ids: {all_special_token_ids}\n")
     features = []
     for i, example in enumerate(examples):
+
         inputs = {k: batch_encoding[k][i] for k in batch_encoding if k != "offset_mapping"}
         if "attention_mask" in inputs:
             inputs["attention_mask"] = [bool(m) for m in inputs["attention_mask"]]
         wp_offsets = batch_encoding["offset_mapping"][i]
+        # if i == 0:
+        #     print(f"\nconvert_examples_to_features -> inputs: {inputs}\n")
+        #     print(f"\nconvert_examples_to_features -> wp_offsets: {wp_offsets}\n")
 
         sent_a_mask = sent_b_mask = graph_a = graph_b = None
         if graphs is not None:
@@ -358,13 +374,25 @@ def convert_examples_to_features(
 
             for graph, wp_offsets in to_enumerate:
                 if graph is None: continue
+
+                # TODO: we do not have such anchors in the metadata
+
+                # print(inputs[0])
                 anchors = [metadata.get('anchors') for metadata in graph.gdata['metadata']]
+                # print(f"\nconvert_examples_to_features -> anchors: {anchors}\n")
+                # print(f"\nconvert_examples_to_features -> anchors type: {type(anchors)}\n")
+                # print(f"\nconvert_examples_to_features -> wp offsets: {wp_offsets}\n")
                 wpidx2graphid = torch.tensor(_calc_wpidx2graphid(anchors, wp_offsets), dtype=torch.bool)  # (n_wp, n_nodes)
+                # print(f"\nconvert_examples_to_features -> wpidx2graphid: {wpidx2graphid}\n")
+                # print(f"\nconvert_examples_to_features -> wpidx2graphid type: {type(anchors)}\n")
                 graph.gdata['wpidx2graphid'] = wpidx2graphid # TODO: if we really want to have some fun we can make this a sparse tensor
                 del graph.gdata['metadata']  # save memory
 
         feature = InputFeatures(**inputs, sent_a_mask=sent_a_mask, sent_b_mask=sent_b_mask, graph_a=graph_a, graph_b=graph_b, label=label)
         features.append(feature)
+
+
+        # exit()
 
     for i, example in enumerate(examples[:5]):
         logger.info("*** Example ***")
