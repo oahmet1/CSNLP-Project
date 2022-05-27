@@ -1,0 +1,889 @@
+pool_node_embeddings -> last_layers shape: torch.Size([4, 13, 768])
+
+
+pool_node_embeddings -> masks: tensor([[False,  True,  True,  True,  True,  True,  True,  True,  True,  True,
+          True, False, False],
+        [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,
+          True,  True, False],
+        [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,
+         False, False, False],
+        [False,  True,  True,  True,  True,  True,  True,  True,  True,  True,
+          True,  True, False]], device='cuda:0')
+
+
+pool_node_embeddings -> masks shape: torch.Size([4, 13])
+
+
+pool_node_embeddings -> gdata keys: dict_keys(['wpidx2graphid'])
+
+
+pool_node_embeddings -> batch_num_nodes: tensor([8, 9, 6, 8], device='cuda:0')
+pool_node_embeddings -> bsz: 4
+pool_node_embeddings -> max_sent_len: 11
+pool_node_embeddings -> max_n_nodes: 9
+pool_node_embeddings -> emb_dim: 768
+
+pool_node_embeddings -> device: cuda:0
+
+
+pool_node_embeddings -> masks_cumsum: tensor([[ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 10, 10],
+        [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 11],
+        [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  9,  9,  9],
+        [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 11]], device='cuda:0')
+
+pool_node_embeddings -> sentence_starts: tensor([1, 1, 1, 1], device='cuda:0')
+
+pool_node_embeddings -> sentence_ends: tensor([11, 12, 10, 12], device='cuda:0')
+
+pool_node_embeddings -> max_sentence_len: 11
+
+
+pool_node_embeddings -> rolled_last_layers: tensor([[[-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+           3.6996e-02, -7.4460e-02],
+         [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+           6.9323e-03, -8.3317e-02],
+         [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+           8.3031e-02, -1.4264e-02],
+         ...,
+         [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+          -1.9656e-02,  1.1717e-02],
+         [ 4.8654e-02,  2.5461e-03,  7.6003e-02,  ...,  9.2945e-02,
+           3.7559e-03,  9.4745e-02],
+         [-9.2985e-02,  7.7775e-02,  4.5802e-02,  ..., -6.8820e-02,
+          -2.0167e-02, -2.3488e-02]],
+
+        [[-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+           1.2312e-01, -6.7965e-02],
+         [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+          -5.4768e-02, -4.4238e-02],
+         [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+           7.2527e-02, -1.3531e-01],
+         ...,
+         [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+          -1.7511e-02, -1.6705e-02],
+         [-6.0482e-02,  5.3914e-02,  2.8602e-02,  ...,  1.3124e-01,
+          -3.7163e-02,  6.0035e-02],
+         [-1.2448e-01,  1.0098e-01, -3.5847e-03,  ..., -5.5229e-02,
+          -2.0748e-02,  9.5086e-04]],
+
+        [[-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+          -7.5810e-02, -2.4302e-02],
+         [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+          -1.4406e-01,  6.7104e-02],
+         [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+          -7.8933e-02,  7.0297e-02],
+         ...,
+         [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+          -5.4111e-02,  2.7999e-02],
+         [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+          -5.4111e-02,  2.7999e-02],
+         [-1.4993e-01,  1.1289e-01,  2.4670e-02,  ..., -7.0016e-02,
+          -4.4430e-02, -2.6957e-02]],
+
+        [[-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+          -2.7507e-01, -3.3458e-01],
+         [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+           4.8569e-02,  1.7099e-01],
+         [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+          -5.3178e-03, -4.3835e-02],
+         ...,
+         [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+          -3.1952e-02, -8.3872e-02],
+         [-3.6509e-02,  4.7351e-02,  3.9607e-02,  ...,  1.0647e-01,
+          -2.2787e-02,  6.2227e-02],
+         [-1.0830e-01,  9.5857e-02,  6.4566e-03,  ..., -7.3591e-02,
+          -2.9014e-02, -5.7472e-02]]], device='cuda:0')
+
+
+pool_node_embeddings -> rolled_last_layers: torch.Size([4, 13, 768])
+
+
+pool_node_embeddings -> segmented_last_layers: tensor([[[-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+           3.6996e-02, -7.4460e-02],
+         [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+           6.9323e-03, -8.3317e-02],
+         [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+           8.3031e-02, -1.4264e-02],
+         ...,
+         [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+          -4.2543e-02,  3.9995e-02],
+         [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+          -2.1733e-02, -4.6601e-02],
+         [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+          -1.9656e-02,  1.1717e-02]],
+
+        [[-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+           1.2312e-01, -6.7965e-02],
+         [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+          -5.4768e-02, -4.4238e-02],
+         [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+           7.2527e-02, -1.3531e-01],
+         ...,
+         [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+          -1.0452e-01,  2.8327e-01],
+         [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+          -5.0116e-03, -7.1856e-02],
+         [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+          -1.7511e-02, -1.6705e-02]],
+
+        [[-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+          -7.5810e-02, -2.4302e-02],
+         [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+          -1.4406e-01,  6.7104e-02],
+         [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+          -7.8933e-02,  7.0297e-02],
+         ...,
+         [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+          -4.9963e-02, -5.3424e-02],
+         [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+          -3.5215e-02, -2.6584e-02],
+         [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+          -5.4111e-02,  2.7999e-02]],
+
+        [[-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+          -2.7507e-01, -3.3458e-01],
+         [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+           4.8569e-02,  1.7099e-01],
+         [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+          -5.3178e-03, -4.3835e-02],
+         ...,
+         [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+           1.3175e-01,  7.0020e-02],
+         [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+           8.1653e-03,  8.4362e-02],
+         [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+          -3.1952e-02, -8.3872e-02]]], device='cuda:0')
+
+
+pool_node_embeddings -> segmented_last_layers: torch.Size([4, 11, 768])
+
+
+pool_node_embeddings -> wpidx2graphid: tensor([[[ True, False, False, False, False, False, False, False, False],
+         [False,  True, False, False, False, False, False, False, False],
+         [False, False,  True, False, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False, False,  True, False, False, False, False],
+         [False, False, False, False, False,  True, False, False, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False, False, False, False, False,  True, False, False],
+         [False, False, False, False, False, False, False,  True, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False, False, False, False, False, False, False, False]],
+
+        [[ True, False, False, False, False, False, False, False, False],
+         [False,  True, False, False, False, False, False, False, False],
+         [False, False,  True, False, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False, False,  True, False, False, False, False],
+         [False, False, False, False, False,  True, False, False, False],
+         [False, False, False, False, False, False,  True, False, False],
+         [False, False, False, False, False, False, False,  True, False],
+         [False, False, False, False, False, False, False, False,  True],
+         [False, False, False, False, False, False, False, False,  True],
+         [False, False, False, False, False, False, False, False, False]],
+
+        [[ True, False, False, False, False, False, False, False, False],
+         [False,  True, False, False, False, False, False, False, False],
+         [False, False,  True, False, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False, False,  True, False, False, False, False],
+         [False, False, False, False, False,  True, False, False, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False, False, False, False, False, False, False, False]],
+
+        [[ True, False, False, False, False, False, False, False, False],
+         [False,  True, False, False, False, False, False, False, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False,  True, False, False, False, False, False, False],
+         [False, False, False,  True, False, False, False, False, False],
+         [False, False, False, False, False, False, False, False, False],
+         [False, False, False, False,  True, False, False, False, False],
+         [False, False, False, False, False,  True, False, False, False],
+         [False, False, False, False, False, False,  True, False, False],
+         [False, False, False, False, False, False, False,  True, False],
+         [False, False, False, False, False, False, False, False, False]]],
+       device='cuda:0')
+
+
+pool_node_embeddings -> wpidx2graphid: torch.Size([4, 11, 9])
+
+
+pool_node_embeddings -> expanded_wpidx2graphid: tensor([[[[ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         ...,
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]]],
+
+
+        [[[ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         ...,
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]]],
+
+
+        [[[ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         ...,
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]]],
+
+
+        [[[ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         ...,
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [ True,  True,  True,  ...,  True,  True,  True],
+          [False, False, False,  ..., False, False, False]],
+
+         [[False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          ...,
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False],
+          [False, False, False,  ..., False, False, False]]]], device='cuda:0')
+
+
+pool_node_embeddings -> expanded_wpidx2graphid: torch.Size([4, 11, 9, 768])
+
+
+pool_node_embeddings -> expanded_segmented_last_layers: tensor([[[[-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02],
+          [-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02],
+          [-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02],
+          ...,
+          [-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02],
+          [-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02],
+          [-7.7962e-02,  3.6257e-02,  1.2947e-01,  ..., -2.2401e-01,
+            3.6996e-02, -7.4460e-02]],
+
+         [[-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02],
+          [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02],
+          [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02],
+          ...,
+          [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02],
+          [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02],
+          [-3.1444e-02,  1.4474e-01,  2.2120e-01,  ..., -2.7357e-02,
+            6.9323e-03, -8.3317e-02]],
+
+         [[-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02],
+          [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02],
+          [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02],
+          ...,
+          [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02],
+          [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02],
+          [-1.4272e-01,  1.9256e-01,  5.9062e-02,  ..., -4.0497e-02,
+            8.3031e-02, -1.4264e-02]],
+
+         ...,
+
+         [[ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02],
+          [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02],
+          [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02],
+          ...,
+          [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02],
+          [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02],
+          [ 4.6733e-02,  8.0196e-02,  1.0921e-01,  ...,  1.4114e-01,
+           -4.2543e-02,  3.9995e-02]],
+
+         [[-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02],
+          [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02],
+          [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02],
+          ...,
+          [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02],
+          [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02],
+          [-8.0264e-02,  6.8158e-02,  3.1167e-02,  ..., -8.7003e-02,
+           -2.1733e-02, -4.6601e-02]],
+
+         [[ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02],
+          [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02],
+          [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02],
+          ...,
+          [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02],
+          [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02],
+          [ 9.9098e-05, -4.9759e-02,  1.0987e-01,  ...,  2.5808e-01,
+           -1.9656e-02,  1.1717e-02]]],
+
+
+        [[[-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02],
+          [-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02],
+          [-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02],
+          ...,
+          [-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02],
+          [-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02],
+          [-8.6279e-02,  7.6519e-02, -3.4717e-02,  ..., -9.0289e-02,
+            1.2312e-01, -6.7965e-02]],
+
+         [[ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02],
+          [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02],
+          [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02],
+          ...,
+          [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02],
+          [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02],
+          [ 2.5576e-02,  2.4301e-02,  4.9331e-02,  ..., -1.3576e-01,
+           -5.4768e-02, -4.4238e-02]],
+
+         [[ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01],
+          [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01],
+          [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01],
+          ...,
+          [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01],
+          [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01],
+          [ 8.3904e-02,  7.7571e-02,  1.2845e-01,  ...,  1.5574e-01,
+            7.2527e-02, -1.3531e-01]],
+
+         ...,
+
+         [[-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01],
+          [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01],
+          [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01],
+          ...,
+          [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01],
+          [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01],
+          [-9.7207e-03,  8.1533e-02,  1.3325e-01,  ...,  2.4478e-01,
+           -1.0452e-01,  2.8327e-01]],
+
+         [[-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02],
+          [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02],
+          [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02],
+          ...,
+          [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02],
+          [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02],
+          [-1.4039e-01, -2.5155e-02,  1.4487e-01,  ...,  1.4685e-01,
+           -5.0116e-03, -7.1856e-02]],
+
+         [[-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02],
+          [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02],
+          [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02],
+          ...,
+          [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02],
+          [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02],
+          [-1.1783e-01,  9.2920e-02, -2.4997e-02,  ..., -7.5048e-02,
+           -1.7511e-02, -1.6705e-02]]],
+
+
+        [[[-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02],
+          [-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02],
+          [-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02],
+          ...,
+          [-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02],
+          [-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02],
+          [-1.2412e-01,  6.5314e-02,  1.4796e-01,  ..., -1.0678e-02,
+           -7.5810e-02, -2.4302e-02]],
+
+         [[ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02],
+          [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02],
+          [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02],
+          ...,
+          [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02],
+          [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02],
+          [ 3.6935e-02,  1.2786e-01,  1.3134e-01,  ..., -1.1175e-01,
+           -1.4406e-01,  6.7104e-02]],
+
+         [[-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02],
+          [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02],
+          [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02],
+          ...,
+          [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02],
+          [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02],
+          [-9.4536e-03,  3.6274e-02,  1.9001e-01,  ..., -1.7144e-01,
+           -7.8933e-02,  7.0297e-02]],
+
+         ...,
+
+         [[-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02],
+          [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02],
+          [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02],
+          ...,
+          [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02],
+          [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02],
+          [-1.4405e-01,  1.0833e-01,  7.4556e-03,  ..., -9.0529e-02,
+           -4.9963e-02, -5.3424e-02]],
+
+         [[-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02],
+          [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02],
+          [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02],
+          ...,
+          [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02],
+          [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02],
+          [-4.3982e-02,  4.4294e-02,  9.9994e-02,  ...,  1.7180e-01,
+           -3.5215e-02, -2.6584e-02]],
+
+         [[ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02],
+          [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02],
+          [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02],
+          ...,
+          [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02],
+          [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02],
+          [ 2.8201e-02,  7.4267e-02,  9.1117e-02,  ...,  1.9954e-02,
+           -5.4111e-02,  2.7999e-02]]],
+
+
+        [[[-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01],
+          [-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01],
+          [-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01],
+          ...,
+          [-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01],
+          [-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01],
+          [-5.2796e-02,  1.1021e-01, -7.5843e-02,  ...,  1.2768e-01,
+           -2.7507e-01, -3.3458e-01]],
+
+         [[ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01],
+          [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01],
+          [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01],
+          ...,
+          [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01],
+          [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01],
+          [ 1.5418e-01,  3.1523e-02,  4.0414e-02,  ...,  3.4662e-01,
+            4.8569e-02,  1.7099e-01]],
+
+         [[ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02],
+          [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02],
+          [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02],
+          ...,
+          [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02],
+          [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02],
+          [ 2.5284e-01,  5.5602e-02, -1.7747e-02,  ..., -1.2959e-02,
+           -5.3178e-03, -4.3835e-02]],
+
+         ...,
+
+         [[ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02],
+          [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02],
+          [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02],
+          ...,
+          [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02],
+          [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02],
+          [ 1.4283e-01, -2.6800e-02,  5.1633e-02,  ...,  8.4775e-03,
+            1.3175e-01,  7.0020e-02]],
+
+         [[ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02],
+          [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02],
+          [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02],
+          ...,
+          [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02],
+          [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02],
+          [ 4.5532e-02, -3.9066e-01, -2.9939e-02,  ..., -4.6891e-01,
+            8.1653e-03,  8.4362e-02]],
+
+         [[-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02],
+          [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02],
+          [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02],
+          ...,
+          [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02],
+          [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02],
+          [-1.0226e-01,  8.4814e-02, -1.4666e-02,  ..., -9.6686e-02,
+           -3.1952e-02, -8.3872e-02]]]], device='cuda:0')
+
+
+pool_node_embeddings -> expanded_segmented_last_layers: torch.Size([4, 11, 9, 768])
+
+
+pool_node_embeddings -> node_embeddings: torch.Size([4, 9, 768])
+
+
+pool_node_embeddings -> node_embeddings: tensor([[[-0.0780,  0.0363,  0.1295,  ..., -0.2240,  0.0370, -0.0745],
+         [-0.0314,  0.1447,  0.2212,  ..., -0.0274,  0.0069, -0.0833],
+         [-0.1427,  0.1926,  0.0591,  ..., -0.0405,  0.0830, -0.0143],
+         ...,
+         [ 0.0045, -0.0963,  0.2351,  ..., -0.0740,  0.0254, -0.0557],
+         [ 0.0467,  0.0802,  0.1092,  ...,  0.1411, -0.0425,  0.0400],
+         [ 0.0000,  0.0000,  0.0000,  ...,  0.0000,  0.0000,  0.0000]],
+
+        [[-0.0863,  0.0765, -0.0347,  ..., -0.0903,  0.1231, -0.0680],
+         [ 0.0256,  0.0243,  0.0493,  ..., -0.1358, -0.0548, -0.0442],
+         [ 0.0839,  0.0776,  0.1284,  ...,  0.1557,  0.0725, -0.1353],
+         ...,
+         [ 0.0192,  0.1404,  0.0660,  ...,  0.1231,  0.0421,  0.2002],
+         [-0.1193, -0.0625,  0.2207,  ..., -0.0533,  0.2492,  0.1750],
+         [-0.0751,  0.0282,  0.1391,  ...,  0.1958, -0.0548,  0.1057]],
+
+        [[-0.1241,  0.0653,  0.1480,  ..., -0.0107, -0.0758, -0.0243],
+         [ 0.0369,  0.1279,  0.1313,  ..., -0.1118, -0.1441,  0.0671],
+         [-0.0095,  0.0363,  0.1900,  ..., -0.1714, -0.0789,  0.0703],
+         ...,
+         [ 0.0000,  0.0000,  0.0000,  ...,  0.0000,  0.0000,  0.0000],
+         [ 0.0000,  0.0000,  0.0000,  ...,  0.0000,  0.0000,  0.0000],
+         [ 0.0000,  0.0000,  0.0000,  ...,  0.0000,  0.0000,  0.0000]],
+
+        [[-0.0528,  0.1102, -0.0758,  ...,  0.1277, -0.2751, -0.3346],
+         [ 0.1542,  0.0315,  0.0404,  ...,  0.3466,  0.0486,  0.1710],
+         [ 0.1593, -0.1548,  0.0726,  ...,  0.4322,  0.3376,  0.1328],
+         ...,
+         [ 0.1428, -0.0268,  0.0516,  ...,  0.0085,  0.1317,  0.0700],
+         [ 0.0455, -0.3907, -0.0299,  ..., -0.4689,  0.0082,  0.0844],
+         [ 0.0000,  0.0000,  0.0000,  ...,  0.0000,  0.0000,  0.0000]]],
+       device='cuda:0')
+
+
+pool_node_embeddings -> node_embeddings: torch.Size([4, 9, 768])
+
+/home/david/Programming/SemanticsNLPProject/models/semantic_encoder.py:171: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.clone().detach() or sourceTensor.clone().detach().requires_grad_(True), rather than torch.tensor(sourceTensor).
+  node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
+
+pool_node_embeddings -> node_embeddings_mask: tensor([[ True,  True,  True,  True,  True,  True,  True,  True, False],
+        [ True,  True,  True,  True,  True,  True,  True,  True,  True],
+        [ True,  True,  True,  True,  True,  True, False, False, False],
+        [ True,  True,  True,  True,  True,  True,  True,  True, False]],
+       device='cuda:0')
+pool_node_embeddings -> node_embeddings_mask: torch.Size([4, 9])
+
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------
+def _calc_wpidx2graphid(anchors, wp_offsets):
+    pidx2graphid = [[False] * len(anchors) for _ in range(len(wp_offsets))]
+        # There's probably an O(n) way to do this but the lists are usually short anyway
+        for wp_idx, wp_span in enumerate(wp_offsets):
+            for graph_id, node_span in enumerate(anchors):
+                if node_span is not None and _spans_overlap(wp_span, node_span):
+                    wpidx2graphid[wp_idx][graph_id] = True
+
+    return wpidx2graphid
+
+sep token id 2
+Truncation was not explicitly activated but `max_length` is provided a specific value, please use `truncation=True` to explicitly truncate examples to max length. Defaulting to 'longest_first' truncation strategy. If you encode pairs of sequences (GLUE-style) with the tokenizer you can select this strategy more precisely by providing a specific strategy to `truncation`.
+
+ -> all special token ids: {0, 2}
+
+ -> inputs: {'input_ids': [0, 250, 3286, 16, 602, 160, 4, 2, 2, 4688, 935, 3286, 16, 602, 160, 4, 2], 'attention_mask': [True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True, True]}
+
+ -> wp_offsets: [(0, 0), (0, 1), (2, 7), (8, 10), (11, 17), (18, 21), (21, 22), (0, 0), (0, 0), (0, 2), (3, 6), (7, 12), (13, 15), (16, 22), (23, 26), (26, 27), (0, 0)]
+
+ -> anchors: [[0, 1], [2, 7], [11, 17]]
+
+ -> anchors type: <class 'list'>
+
+ -> wp offsets: [(0, 1), (2, 7), (8, 10), (11, 17), (18, 21), (21, 22)]
+
+ -> wpidx2graphid: tensor([[ True, False, False],
+        [False,  True, False],
+        [False, False, False],
+        [False, False,  True],
+        [False, False, False],
+        [False, False, False]])
+
+ -> wpidx2graphid type: <class 'list'>
+
+ -> anchors: [[0, 2], [3, 6], [7, 12], [16, 22]]
+
+ -> anchors type: <class 'list'>
+
+ -> wp offsets: [(0, 2), (3, 6), (7, 12), (13, 15), (16, 22), (23, 26), (26, 27)]
+
+ -> wpidx2graphid: tensor([[ True, False, False, False],
+        [False,  True, False, False],
+        [False, False,  True, False],
+        [False, False, False, False],
+        [False, False, False,  True],
+        [False, False, False, False],
+        [False, False, False, False]])
+
+ -> wpidx2graphid type: <class 'list'>
+
+InputExample(guid='train-0', text_a='A plane is taking off.', text_b='An air plane is taking off.', label='5.000')
+InputExample(guid='train-1', text_a='A man is playing a large flute.', text_b='A man is playing a flute.', label='3.800')
+InputExample(guid='train-2', text_a='A man is spreading shreded cheese on a pizza.', text_b='A man is spreading shredded cheese on an uncooked pizza.', label='3.800'),
+InputExample(guid='train-3', text_a='Three men are playing chess.', text_b='Two men are playing chess.', label='2.600')
+
+
+
+
+
+
+
