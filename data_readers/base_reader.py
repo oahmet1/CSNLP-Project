@@ -94,8 +94,10 @@ def all_rdf_to_dgl(all_split_names, all_rdf_graphs, all_metadata, bidirectional=
 
 
 def all_amr_to_dgl(all_split_names, all_amr_graphs, bidirectional=True):
-    # what we have to return:
+    # split names should be train, dev, test (and maybe dev2, test2)
     # graphs, relation2id, num_relations = get_graphs() -> see semantic_encoder
+    # TODO: bidirectional is currently always set!
+
 
     assert len(all_split_names) == len(all_amr_graphs)
 

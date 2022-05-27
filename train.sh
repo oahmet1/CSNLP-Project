@@ -10,4 +10,4 @@ python train.py \
     --learning_rate 2e-5 --warmup_ratio 0.06 --weight_decay 0.1 \
     --formalism dm --n_graph_layers 2 --n_graph_attn_composition_layers 2 \
     --graph_n_bases 80 --graph_dim 512 --post_combination_layernorm \
-    --gpus 1 --numworkers 10
+    --gpus 1 --numworkers 6

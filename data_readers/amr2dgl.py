@@ -13,8 +13,8 @@ from tqdm import tqdm
 import penman
 
 
-
-class RDFReader(object):
+# TODO: implement a small version of this to make stuff work
+class AMRReader(object):
     __graph = None
     __freq = {}
 
@@ -44,6 +44,7 @@ class RDFReader(object):
         Returns a list of relations, ordered descending by frequency
         :return:
         """
+        # TODO: change this to work for our case
         res = list(set(self.__graph.predicates()))
         res.sort(key=lambda rel: - self.freq(rel))
         return res
@@ -56,8 +57,8 @@ class RDFReader(object):
             return 0
         return self.__freq[rel]
 
-# TODO: assume we already read/create the amr_graphs somewhere earlier
-def amr2dgl(amr_graph, metadata, relation2id, bidirectional=True):
+# TODO: assume we already create the amr_graphs somewhere earlier
+def amr2dgl(amr_graph, relation2id, bidirectional=True):
 
     p_graph = penman.decode(amr_graph)
 
@@ -180,6 +181,6 @@ def amr_relations_in(rdf_graphs):
 
     all_relations = set()
     for rdf_graph in tqdm(rdf_graphs):
-        with RDFReader(rdf_graph) as reader:
+        with AMRReader(rdf_graph) as reader:
             all_relations |= set(reader.relationList())
     return all_relations
