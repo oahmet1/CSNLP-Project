@@ -60,17 +60,29 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
         if sent_b_masks is not None and attention_mask is not None:
             assert (sent_b_masks & attention_mask == sent_b_masks).all()
 
-        model_output = self.transformer(
-            input_ids=input_ids,
-            attention_mask=attention_mask.long() if attention_mask is not None else None,
-            token_type_ids=token_type_ids,
-        )
+        # TODO
+        if self.word2vec:
+            # TODO probably all we need to set requires gradient to false is for the embeddings we have her
+            #  since it will never be passed through the transformer will will never compute a gradient for it..
+            embeddings = self.transformer.model.embeddings.word_embeddings(input_ids)
+            # print(embeddings)
+            # fill this correctly
+            last_layers = embeddings
+            transformer_output = torch.tensor(0.0, device=input_ids.get_device())
 
-        # TODO: check if this is supposed to be last_layers, versus last_hidden_state
-        last_layers, pooler_output = model_output['last_hidden_state'], model_output['pooler_output']
-        # print(model_output)
 
-        transformer_output = self.dropout(pooler_output)  # (bsz, transformer_dim)
+        else:
+            model_output = self.transformer(
+                input_ids=input_ids,
+                attention_mask=attention_mask.long() if attention_mask is not None else None,
+                token_type_ids=token_type_ids,
+            )
+
+            # TODO: check if this is supposed to be last_layers, versus last_hidden_state
+            last_layers, pooler_output = model_output['last_hidden_state'], model_output['pooler_output']
+            # print(model_output)
+
+            transformer_output = self.dropout(pooler_output)  # (bsz, transformer_dim)
 
         # rgcn
         rgcn_output = None
@@ -229,6 +241,10 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
                             action='store_true',
                             help="Whether to add a final dropout to the graph encoder output before combining it with the transformer output.")
 
+        parser.add_argument("--word2vec",
+                            action='store_true',
+                            help="Ignore transformer and use word2vec embeddings.")
+
         return parser
 
 
@@ -263,6 +279,7 @@ class RGCNSemanticEncoder(RGCNSemanticEncoderBase):
             return {'logits': logits}
 
     def compute_loss(self, output_dict, labels):
+
         logits = output_dict["logits"]
         if self.output_mode == "classification":
             loss = F.cross_entropy(logits.view(-1, logits.shape[-1]), labels.view(-1))

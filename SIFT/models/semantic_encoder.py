@@ -49,6 +49,9 @@ class SemanticEncoder(BaseLightningModel):
         self.use_semantic_graph = args.formalism is not None
         self.formalism = args.formalism
 
+        # Flag to indicate we are using word2vec
+        self.word2vec = args.word2vec
+
         self.output_mode = output_modes[args.task]
         self.metric_to_watch = metric_to_watch[args.task]
         self.metric_watch_mode = metric_watch_mode[args.task]
@@ -121,7 +124,7 @@ class SemanticEncoder(BaseLightningModel):
             # print(f"\npool_node_embeddings -> batch_num_nodes: {batch_num_nodes}\n")
             wpidx2graphid = gdata['wpidx2graphid']  # (bsz, max_sent_len, max_n_nodes)
             # print(f"\npool_node_embeddings -> wpidx2graphid: {wpidx2graphid}\n")
-            device = last_layers.device
+            # device = last_layers.device
             bsz, max_sent_len, max_n_nodes = wpidx2graphid.shape
             emb_dim = last_layers.shape[-1]
             # print(f"\npool_node_embeddings -> bsz: {bsz}\n")
