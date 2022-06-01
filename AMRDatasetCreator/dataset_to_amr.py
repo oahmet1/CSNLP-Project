@@ -7,7 +7,6 @@ import penman
 import json
 
 
-
 class SemanticEntailmentAMRDataset:
     def __init__(self, dataset_name, amr_parser_path='/home/david/tmp/model_parse_xfm_bart_base-v0_1_0'):
 
