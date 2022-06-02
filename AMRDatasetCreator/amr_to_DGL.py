@@ -30,14 +30,15 @@ def process(file_name):
         if len(penman_graph.edges()) != 0:
             for edge in penman_graph.edges():
                 source, role, target = edge.source, edge.role, edge.target
-                nodes.add(source)
-                nodes.add(target)
+                #nodes.add(source)
+                #nodes.add(target)
                 # v stands for vertex - not sure if we need multiple vertices in the future.
                 edge_types.add(('v', role, 'v'))
 
         if len(penman_graph.attributes()) != 0:
             for attribute in penman_graph.attributes():
                 source, role, target = attribute.source, attribute.role, attribute.target
+                #TODO : add remove attributes or find embeddings for them
                 nodes.add(source)
                 nodes.add(target)
                 edge_types.add(('v', role, 'v'))
@@ -92,7 +93,7 @@ def process(file_name):
             graph_to_token_alignments[node_id] = value.indices
 
         print(node_to_index)
-        print(graph_to_token_alignments)
+        print("graphToTokenAlignment : " ,graph_to_token_alignments)
 
 
         # we give back: the DGL graph, the node to token alignments and the token to character alignments
