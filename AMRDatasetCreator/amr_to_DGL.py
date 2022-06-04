@@ -3,6 +3,7 @@ import penman
 from penman import surface
 import dgl
 import torch
+import pickle
 
 
 def process(file_name):
@@ -24,8 +25,12 @@ def process(file_name):
         print("edges :   ", penman_graph.edges())
         print(sample[0])
 
-        nodes = set()
+        nodes = set(penman_graph.variables())
         edge_types = set()
+
+        print('vars', penman_graph.variables())
+        print('instances', penman_graph.instances())
+
 
         if len(penman_graph.edges()) != 0:
             for edge in penman_graph.edges():
@@ -104,5 +109,10 @@ def process(file_name):
 
 
 if __name__ == '__main__':
-    graph_and_alignments = process('amr_data_cola_train.json')
-    print(graph_and_alignments)
+    f_name = 'amr_data_cola_train.json'
+    graph_and_alignments = process(f_name)
+    # print(graph_and_alignments)
+    # Store data (serialize)
+    # pickle code from https://stackoverflow.com/questions/11218477/how-can-i-use-pickle-to-save-a-dict-or-any-other-python-object
+    with open(f'{f_name}.pickle', 'wb') as handle:
+        pickle.dump(graph_and_alignments, handle, protocol=pickle.HIGHEST_PROTOCOL)
