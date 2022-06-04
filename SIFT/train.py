@@ -14,7 +14,7 @@ reload(logging)
 
 from models import RGCNSemanticEncoder
 
-# os.environ["TOKENIZERS_PARALLELISM"] = "true"
+os.environ["TOKENIZERS_PARALLELISM"] = "true"
 
 logger = logging.getLogger(__name__)
 
