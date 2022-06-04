@@ -49,9 +49,6 @@ class SemanticEncoder(BaseLightningModel):
         self.use_semantic_graph = args.formalism is not None
         self.formalism = args.formalism
 
-        # Flag to indicate we are using word2vec
-        self.word2vec = args.word2vec
-
         self.output_mode = output_modes[args.task]
         self.metric_to_watch = metric_to_watch[args.task]
         self.metric_watch_mode = metric_watch_mode[args.task]
@@ -105,81 +102,36 @@ class SemanticEncoder(BaseLightningModel):
             node_embs: (bsz, max_num_nodes, emb_dim)
             node_embeddings_mask: (bsz, max_num_nodes)
         """
+        batch_num_nodes = batch_num_nodes()
+        wpidx2graphid = gdata['wpidx2graphid']  # (bsz, max_sent_len, max_n_nodes)
+        device = last_layers.device
+        bsz, max_sent_len, max_n_nodes = wpidx2graphid.shape
+        emb_dim = last_layers.shape[-1]
+        assert max(batch_num_nodes) == wpidx2graphid.shape[-1]
 
-        if self.formalism == "amr":
-            #############################################################################################
-            # TODO: adapt this for our case!!!!
-            #############################################################################################
+        # the following logic happens to work if the graph is empty, in which case its sentence_end is guaranteed to be 1 (exclusive)
+        masks_cumsum = masks.cumsum(1)
+        sentence_starts = first_true_idx(masks, 1, masks_cumsum)
+        sentence_ends = last_true_idx(masks, 1, masks_cumsum) + 1  # exclusive
+        max_sentence_len = (sentence_ends - sentence_starts).max()
 
+        # we're using a for loop here since only doing rolling across the batch dimension shouldn't be very expensive
+        # that said, can we do it without a loop?
+        rolled_last_layers = torch.stack([last_layer.roll(-sentence_start.item(), dims=0) for last_layer, sentence_start in zip(last_layers, sentence_starts)])
+        segmented_last_layers = rolled_last_layers[:, :max_sentence_len, :]  # (bsz, max_sent_len, emb_dim)
+        assert segmented_last_layers.shape[:2] == wpidx2graphid.shape[:2]
 
-            pass
-        else:
+        # (bsz, max_sent_len, max_n_nodes, emb_dim)
+        expanded_wpidx2graphid = wpidx2graphid.unsqueeze(-1).expand(-1, -1, -1, emb_dim)
+        expanded_segmented_last_layers = segmented_last_layers.unsqueeze(2).expand(-1, -1, max_n_nodes, -1)
 
-            # print(f"\npool_node_embeddings -> last_layers shape: {last_layers.shape}\n")
-            # print(f"\npool_node_embeddings -> masks: {masks}\n")
-            # print(f"\npool_node_embeddings -> masks shape: {masks.shape}\n")
-            # print(f"\npool_node_embeddings -> gdata keys: {gdata.keys()}\n")
+        # (bsz, max_n_nodes, emb_dim)
+        node_embeddings = masked_mean(expanded_segmented_last_layers, expanded_wpidx2graphid, 1)
 
-            batch_num_nodes = batch_num_nodes()
-            # print(f"\npool_node_embeddings -> batch_num_nodes: {batch_num_nodes}\n")
-            wpidx2graphid = gdata['wpidx2graphid']  # (bsz, max_sent_len, max_n_nodes)
-            # print(f"\npool_node_embeddings -> wpidx2graphid: {wpidx2graphid}\n")
-            # device = last_layers.device
-            bsz, max_sent_len, max_n_nodes = wpidx2graphid.shape
-            emb_dim = last_layers.shape[-1]
-            # print(f"\npool_node_embeddings -> bsz: {bsz}\n")
-            # print(f"\npool_node_embeddings -> max_sent_len: {max_sent_len}\n")
-            # print(f"\npool_node_embeddings -> max_n_nodes: {max_n_nodes}\n")
-            # print(f"\npool_node_embeddings -> emb_dim: {emb_dim}\n")
-            # print(f"\npool_node_embeddings -> device: {device}\n")
-            assert max(batch_num_nodes) == wpidx2graphid.shape[-1]
+        node_embeddings = torch.where(expanded_wpidx2graphid.any(1), node_embeddings, torch.tensor(0., device=device))  # some nodes don't have corresponding wordpieces
+        node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
 
-            # the following logic happens to work if the graph is empty, in which case its sentence_end is guaranteed to be 1 (exclusive)
-            masks_cumsum = masks.cumsum(1)
-            # TODO: first_true_idx/last_true_idx are stupid... last true idx could e.g. also just be the last value
-            sentence_starts = first_true_idx(masks, 1, masks_cumsum)
-            sentence_ends = last_true_idx(masks, 1, masks_cumsum) + 1  # exclusive
-            max_sentence_len = (sentence_ends - sentence_starts).max()
-            # print(f"\npool_node_embeddings -> masks_cumsum: {masks_cumsum}\n")
-            # print(f"\npool_node_embeddings -> sentence_starts: {sentence_starts}\n")
-            # print(f"\npool_node_embeddings -> sentence_ends: {sentence_ends}\n")
-            # print(f"\npool_node_embeddings -> max_sentence_len: {max_sentence_len}\n")
-
-            # we're using a for loop here since only doing rolling across the batch dimension shouldn't be very expensive
-            # that said, can we do it without a loop?
-            rolled_last_layers = torch.stack([last_layer.roll(-sentence_start.item(), dims=0) for last_layer, sentence_start in zip(last_layers, sentence_starts)])
-            segmented_last_layers = rolled_last_layers[:, :max_sentence_len, :]  # (bsz, max_sent_len, emb_dim)
-            assert segmented_last_layers.shape[:2] == wpidx2graphid.shape[:2]
-            # print(f"\npool_node_embeddings -> rolled_last_layers: {rolled_last_layers}\n")
-            # print(f"\npool_node_embeddings -> rolled_last_layers: {rolled_last_layers.shape}\n")
-            # print(f"\npool_node_embeddings -> segmented_last_layers: {segmented_last_layers}\n")
-            # print(f"\npool_node_embeddings -> segmented_last_layers: {segmented_last_layers.shape}\n")
-
-            # (bsz, max_sent_len, max_n_nodes, emb_dim)
-            # print(f"\npool_node_embeddings -> wpidx2graphid: {wpidx2graphid}\n")
-            # print(f"\npool_node_embeddings -> wpidx2graphid: {wpidx2graphid.shape}\n")
-            expanded_wpidx2graphid = wpidx2graphid.unsqueeze(-1).expand(-1, -1, -1, emb_dim)
-            expanded_segmented_last_layers = segmented_last_layers.unsqueeze(2).expand(-1, -1, max_n_nodes, -1)
-            # print(f"\npool_node_embeddings -> expanded_wpidx2graphid: {expanded_wpidx2graphid}\n")
-            # print(f"\npool_node_embeddings -> expanded_wpidx2graphid: {expanded_wpidx2graphid.shape}\n")
-            # print(f"\npool_node_embeddings -> expanded_segmented_last_layers: {expanded_segmented_last_layers}\n")
-            # print(f"\npool_node_embeddings -> expanded_segmented_last_layers: {expanded_segmented_last_layers.shape}\n")
-
-            # (bsz, max_n_nodes, emb_dim)
-            node_embeddings = masked_mean(expanded_segmented_last_layers, expanded_wpidx2graphid, 1)
-            # print(f"\npool_node_embeddings -> node_embeddings: {node_embeddings.shape}\n")
-
-            node_embeddings = torch.where(expanded_wpidx2graphid.any(1), node_embeddings, torch.tensor(0., device=device))  # some nodes don't have corresponding wordpieces
-            # print(f"\npool_node_embeddings -> node_embeddings: {node_embeddings}\n")
-            # print(f"\npool_node_embeddings -> node_embeddings: {node_embeddings.shape}\n")
-            node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
-            # print(f"\npool_node_embeddings -> node_embeddings_mask: {node_embeddings_mask}\n")
-            # print(f"\npool_node_embeddings -> node_embeddings_mask: {node_embeddings_mask.shape}\n")
-
-            # TODO: by deleting a bunch of stuff here we might save a lot of GPU memory?????
-            # basically everything is on GPU
-
-            return node_embeddings, node_embeddings_mask
+        return node_embeddings, node_embeddings_mask
 
     def _check_input(self, *inputs):
         len_ = None
