@@ -29,6 +29,7 @@ rdflib = "~=5.0"
 dgl-cu113 = {file="https://data.dgl.ai/wheels/dgl_cu115-0.8.1-cp39-cp39-manylinux1_x86_64.whl"}
 dglgo = "*"
 spacy = "*"
+spacy-conll = "*"
 
 [dev-packages]
 

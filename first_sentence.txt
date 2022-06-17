@@ -1,0 +1,9 @@
+DA GRAPHS nodes :::::::::::  tensor([ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12])
+
+
+DA GRAPHS edges :::::::::::  (tensor([ 1,  0,  3,  3,  1,  2,  5,  5,  3,  4,  7,  7,  5,  6, 10, 10, 10,  7,
+         8,  9, 12, 12, 10, 11]), tensor([ 0,  1,  1,  2,  3,  3,  3,  4,  5,  5,  5,  6,  7,  7,  7,  8,  9, 10,
+        10, 10, 10, 11, 12, 12]))
+
+
+This is all of the Relation types: {rdflib.term.Literal('measure'), rdflib.term.Literal('BV'), rdflib.term.Literal('comp_too'), rdflib.term.Literal('_nor_c'), rdflib.term.Literal('poss'), rdflib.term.Literal('neg'), rdflib.term.Literal('of'), rdflib.term.Literal('comp'), rdflib.term.Literal('part'), rdflib.term.Literal('_and_c'), rdflib.term.Literal('than'), rdflib.term.Literal('compound'), rdflib.term.Literal('_rather+than_c'), rdflib.term.Literal('loc'), rdflib.term.Literal('_and+then_c'), rdflib.term.Literal('ARG1'), rdflib.term.Literal('_even_c'), rdflib.term.Literal('subord'), rdflib.term.Literal('_then_c'), rdflib.term.Literal('parenthetical'), rdflib.term.Literal('comp_so'), rdflib.term.Literal('ARG3'), rdflib.term.Literal('ARG4'), rdflib.term.Literal('temp'), rdflib.term.Literal('_but_c'), rdflib.term.Literal('times'), rdflib.term.Literal('mwe'), rdflib.term.Literal('_or_c'), rdflib.term.Literal('appos'), rdflib.term.Literal('_if+not_c'), rdflib.term.Literal('comp_less'), rdflib.term.Literal('ARG2'), rdflib.term.Literal('manner'), rdflib.term.Literal('conj'), rdflib.term.Literal('comp_enough')}

@@ -1,4 +1,13 @@
 
+.vscode/*
+HIT-SCIR-CoNLL2019/*
+HIT-SCIR-CoNLL2019_models/*
+SIFT/HIT-SCIR-CoNLL2019/
+SIFT/HIT-SCIR-CoNLL2019_models/
+mtool/
+*.udpipe
+
+
 .idea/
 data/
 output_dir/

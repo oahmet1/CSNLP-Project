@@ -7,45 +7,61 @@ sys.path.append(str(Path(__file__).parent.parent.absolute()))
 from tqdm import tqdm
 
 from data_readers import processors
+from datasets import load_dataset
 
-from spacy_conll import init_parser
-
-TRAIN_FILE = 'train.lines'
-DEV_FILE = 'dev.lines'
-TEST_FILE = 'test.lines'
+extension = '.lines'
 
 
-def convert(task, input_dir, output_dir):
-    if any(os.path.isfile(os.path.join(output_dir, filename)) for filename in (TRAIN_FILE, DEV_FILE, TEST_FILE)):
-        raise ValueError('Output file already exists.')
 
-    processor = processors[task]()
-    print(processor)
+def convert(task, output_dir):
 
-    # ugly code duplication
     if task == 'hans':
-        train_examples = processor.get_train_examples(input_dir)
-        dev_examples = processor.get_dev_examples(input_dir)
+        dataset = load_dataset('hans')
+    elif task in ['mnli', 'wnli', 'qnli', 'mnli_mismatched', 'mnli_matched', 'cola', 'rte','mrpc', 'sst2', 'ax', 'qqp' ,'stsb']:
+        dataset = load_dataset('glue', task)
 
-        for examples, filename in ((train_examples, TRAIN_FILE), (dev_examples, DEV_FILE)):
-            with open(os.path.join(output_dir, filename), 'w') as f:
-                for ex_index, example in enumerate(tqdm(examples)):
-                    f.write(f'{ex_index * 2}\t{example.text_a}\n')
-                    f.write(f'{ex_index * 2 + 1}\t{example.text_b}\n')
-    else:
-        train_examples = processor.get_train_examples(input_dir)
-        dev_examples = processor.get_dev_examples(input_dir)
-        test_examples = processor.get_test_examples(input_dir)
+    keys = dataset.keys()
 
-        for examples, filename in ((train_examples, TRAIN_FILE), (dev_examples, DEV_FILE), (test_examples, TEST_FILE)):
-            with open(os.path.join(output_dir, filename), 'w') as f:
-                for ex_index, example in enumerate(tqdm(examples)):
-                    if example.text_b is None:
-                        f.write(f'{ex_index}\t{example.text_a}\n')
-                    else:
-                        f.write(f'{ex_index * 2}\t{example.text_a}\n')
-                        f.write(f'{ex_index * 2 + 1}\t{example.text_b}\n')
+    for key in keys:
+        fname = key + extension
+        gname = key + '.lnn'
+        Path(os.path.join(output_dir, fname)).parent.mkdir(exist_ok=True, parents=True)
+        with open(os.path.join(output_dir, fname), 'w') as f:
+            with open(os.path.join(output_dir, gname), 'w') as g:
+                for ex_index, example in enumerate(tqdm(dataset[key])):
+                    if task  in ['sst2', 'cola']:
+                        f.write(f'{ex_index}\t{example["sentence"]}\n')
+                        g.write(f'{example["sentence"]}\n')
+
+                    elif task in ['mnli', 'mnli_mismatched', 'mnli_matched', 'ax', 'hans']:
+                        f.write(f'{ex_index * 2}\t{example["premise"]}\n')
+                        f.write(f'{ex_index * 2 + 1}\t{example["hypothesis"]}\n')
+
+                        g.write(f'{example["premise"]}\n')
+                        g.write(f'{example["hypothesis"]}\n')
+
+                    elif task in ['qnli']:
+                        f.write(f'{ex_index * 2}\t{example["question"]}\n')
+                        f.write(f'{ex_index * 2 + 1}\t{example["sentence"]}\n')
+
+                        g.write(f'{example["question"]}\n')
+                        g.write(f'{example["sentence"]}\n')
+
+                    elif task in ['wnli', 'stsb', 'rte', 'mrpc']:
+                        f.write(f'{ex_index * 2}\t{example["sentence1"]}\n')
+                        f.write(f'{ex_index * 2 + 1}\t{example["sentence2"]}\n')
+
+                        g.write(f'{example["sentence1"]}\n')
+                        g.write(f'{example["sentence2"]}\n')
+
+                    elif task in ['qqp']:
+                        f.write(f'{ex_index * 2}\t{example["question1"]}\n')
+                        f.write(f'{ex_index * 2 + 1}\t{example["question2"]}\n')
+
+                        g.write(f'{example["question1"]}\n')
+                        g.write(f'{example["question2"]}\n')
+
 
 
 if __name__ == '__main__':
-    convert(sys.argv[1], sys.argv[2], sys.argv[3])
+    convert(sys.argv[1], sys.argv[2])

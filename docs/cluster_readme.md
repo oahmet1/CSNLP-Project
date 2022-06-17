@@ -40,7 +40,7 @@ bsub -n 6 -W 24:00 -R "rusage[mem=4096,ngpus_excl_p=1]" -R "select[gpu_model0==Q
 
 ## ENV SETUP:
 
-module load gcc/8.2.0 python_gpu/3.9.9 //gonna put to a script
+module load gcc/8.2.0 python_gpu/3.9.9 
 
 pip install --user pydantic==1.8.2
 pip install --user tqdm pytorch-lightning numpy notebook jupyter amrlib penman cached-property unidecode datasets

@@ -109,10 +109,6 @@ class SemanticEntailmentAMRDataset:
     def __str__(self):
         return str(self.dataset)
 
-
-
-
-
 def preprocess_all_data(tasks):
     for dataset in tasks.keys():
         ds = SemanticEntailmentAMRDataset(dataset)
