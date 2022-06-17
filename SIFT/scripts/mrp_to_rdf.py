@@ -12,17 +12,20 @@ def parse_mrp(obj, remove_isolate_nodes=True):
     if 'nodes' not in obj or 'edges' not in obj:
         return graph, []
 
+#Find the set of connected nodes
     connected_node_ids = set()
     for edge in obj['edges']:
         if edge['source'] != -1 and edge['target'] != -1:
             connected_node_ids.add(edge['source'])
             connected_node_ids.add(edge['target'])
 
+# I guess every node object has an id
     nodes = []
     graph_metadata = []
     nodeid2nodeidx = {}
     for node in obj['nodes']:
         node_id = node['id']
+        #if we want to remove it skip it, meaning we dont add it to the graph we are creating
         if remove_isolate_nodes and node_id not in connected_node_ids:
             continue
 
@@ -33,6 +36,7 @@ def parse_mrp(obj, remove_isolate_nodes=True):
         nodes.append(Literal(node_idx))
 
         metadata = {}
+        #start the anchor from the beginning of the first token until the end of the last token
         if 'anchors' in node:
             anchors = node['anchors']
             start = min(anchor['from'] for anchor in anchors)
@@ -87,7 +91,16 @@ def convert(input_file, graph_output_file, metadata_output_file):
             graph, graph_metadata = parse_mrp(json_obj)
             graphs.append(graph)
             all_graph_metadata.append(graph_metadata)
+
+# DELETE THIS IF YOU WANT TO RUN THE CODE
+            with open("DM_in_rdf.txt") as f:
+                f.write(graph)
+            break
+
         assert num_lines - 1 + idx_diff == int(json_obj['id'])
+
+
+
 
     pickle.dump(graphs, open(graph_output_file, 'wb'))
     pickle.dump(all_graph_metadata, open(metadata_output_file, 'wb'))

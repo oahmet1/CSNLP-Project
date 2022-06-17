@@ -3,6 +3,7 @@
 rm -r output_dir
 
 TOKENIZERS_PARALLELISM=true
+module load gcc/8.2.0 python_gpu/3.9.9
 
 python train.py \
     --do_train --task qnli --data_dir data/glue_data/QNLI --output_dir output_dir \

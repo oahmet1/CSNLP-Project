@@ -40,7 +40,7 @@ bsub -n 6 -W 24:00 -R "rusage[mem=4096,ngpus_excl_p=1]" -R "select[gpu_model0==Q
 
 ## ENV SETUP:
 
-module load gcc/8.2.0 python_gpu/3.9.9
+module load gcc/8.2.0 python_gpu/3.9.9 //gonna put to a script
 
 pip install --user pydantic==1.8.2
 pip install --user tqdm pytorch-lightning numpy notebook jupyter amrlib penman cached-property unidecode datasets
@@ -75,6 +75,8 @@ bqueues
 ##### this is the run3.sh content
 #!/usr/bin/bash
 TOKENIZERS_PARALLELISM=true
+module load gcc/8.2.0 python_gpu/3.9.9
+
 python train.py \
     --do_train --task qnli --data_dir data/glue_data/QNLI --output_dir output_dir3 \
     --model_name_or_path /cluster/scratch/makleine/CSNLP/huggingface_models/roberta-large --max_seq_length 256 \
