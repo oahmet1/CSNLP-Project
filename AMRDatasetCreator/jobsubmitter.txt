@@ -1,0 +1,1 @@
+bsub -n 4 -W 24:00 -R "rusage[mem=3072,ngpus_excl_p=1]" -R "select[gpu_mtotal0>=9000]" < run_euler.sh 

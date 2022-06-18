@@ -7,9 +7,11 @@ import spacy
 import penman
 import json
 import os
+import sys
+
 
 class SemanticEntailmentAMRDataset:
-    def __init__(self, dataset_name, amr_parser_path='/home/david/tmp/model_parse_xfm_bart_base-v0_1_0'):
+    def __init__(self, dataset_name, amr_parser_path='/cluster/home/zdavid/models/model_parse_xfm_bart_base-v0_1_0.tar.gz'):
 
         self.amr_parser = amrlib.load_stog_model(amr_parser_path)
         self.dataset_name = dataset_name
@@ -58,17 +60,9 @@ class SemanticEntailmentAMRDataset:
         parsed_sents = self.amr_parser.parse_sents(sent_list, add_metadata=True)
         print('All parsed to AMR')
 
-        '''
-        tok_sent = [self.nlp_tokenizer(s) for s in parsed_sents]
-        tok_sent = [[i.text for i in s] for s in tok_sent]
-        self.__aligned_AMR(tok_sent, sent_list)
-
-        print("uiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-        '''
-
         aligned_amr_sentences = []
         for idx, amr_sentence in enumerate(parsed_sents):
-            print(amr_sentence, sent_list[idx])
+            # print(amr_sentence, sent_list[idx])
             aligned_amr_sentences.append(self.__aligned_AMR(amr_sentence, sent_list[idx]))
 
         print('All AMR aligned')
@@ -82,14 +76,6 @@ class SemanticEntailmentAMRDataset:
         return processed_amr_sentence_alignment_pairs
 
     def __aligned_AMR(self, amr_graph_string, sentence):
-        '''
-        os.environ["FABIN_DIR"] = './fast_align'
-        from amrlib.alignments.faa_aligner import FAA_Aligner
-        inference = FAA_Aligner()
-        amr_surface_aligns, alignment_strings = inference.align_sents(sentence, amr_graph_string)
-        print(alignment_strings)
-        exit(-1)
-        '''
         pg = add_lemmas(amr_graph_string, snt_key='snt')
         aligner = RBWAligner.from_penman_w_json(pg)
         penman_graph = aligner.get_penman_graph()
@@ -98,7 +84,6 @@ class SemanticEntailmentAMRDataset:
 
     def __get_alignments(self, penman_graph):
         # returns an array where the i-th entry is a 2-tuple of the start and end characters index of the word (the last exclusive!)
-        # TODO inclusive or exclusive?
         alignments = []
         ref_token = self.nlp_tokenizer(penman_graph.metadata['snt'])
         for i, token in enumerate(json.loads(penman_graph.metadata['tokens'])):
@@ -144,4 +129,9 @@ if __name__ == '__main__':
         'rte': ['test', 'train', 'validation'],
     }
 
-    preprocess_all_data(combos)
+    task_dict = {sys.argv[1]: combos[sys.argv[1]]}
+    preprocess_all_data(task_dict)
+
+
+
+
