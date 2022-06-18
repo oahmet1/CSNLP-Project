@@ -11,8 +11,7 @@ import sys
 
 
 class SemanticEntailmentAMRDataset:
-    def __init__(self, dataset_name, amr_parser_path='/cluster/home/zdavid/models/model_parse_xfm_bart_base-v0_1_0.tar.gz'):
-
+    def __init__(self, dataset_name, amr_parser_path='/cluster/scratch/zdavid/models/model_parse_xfm_bart_base-v0_1_0'):
         self.amr_parser = amrlib.load_stog_model(amr_parser_path)
         self.dataset_name = dataset_name
         self.nlp_tokenizer = spacy.load('en_core_web_sm')

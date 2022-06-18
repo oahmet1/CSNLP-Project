@@ -1,9 +1,9 @@
 import os 
 
-
-
-os.system('pip install spacy penman word2number unidecode transformers datasets')
-os.system('python -m spacy download en_core_web_sm')
+# do this manually!
+#os.system('module load gcc/8.2.0 python_gpu/3.9.9')
+#os.system('pip install spacy penman word2number unidecode transformers datasets')
+#os.system('python -m spacy download en_core_web_sm')
 
 from datasets import load_dataset
 
