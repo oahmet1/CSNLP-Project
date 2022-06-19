@@ -54,16 +54,17 @@ class LoggingCallback(pl.Callback):
                             k: v for k, v in metrics.items() if k not in {"log", "progress_bar", "loss", "val_loss", "rate", "epoch"}
                         }
 
-                    # elif (
-                    #         (pl_module.metric_watch_mode == 'max' and metrics[key] > self.best_dev_metric)
-                    #         or (pl_module.metric_watch_mode == 'min' and metrics[key] < self.best_dev_metric)
-                    # ):
-                    #     self.best_epoch = trainer.current_epoch
-                    #     self.best_dev_metric = metrics[key]
-                    #     self.best_dev_metrics = {
-                    #         k: v for k, v in metrics.items() if
-                    #         k not in {"log", "progress_bar", "loss", "val_loss", "rate", "epoch"}
-                    #     }
+                    # TODO: check if this elif should be commented out... not sure why it was like that
+                    elif (
+                            (pl_module.metric_watch_mode == 'max' and metrics[key] > self.best_dev_metric)
+                            or (pl_module.metric_watch_mode == 'min' and metrics[key] < self.best_dev_metric)
+                    ):
+                        self.best_epoch = trainer.current_epoch
+                        self.best_dev_metric = metrics[key]
+                        self.best_dev_metrics = {
+                            k: v for k, v in metrics.items() if
+                            k not in {"log", "progress_bar", "loss", "val_loss", "rate", "epoch"}
+                        }
 
             logger.info(f"best_epoch = {self.best_epoch}")
             # TODO: THIS IS NOT A FIX THIS IS A WTFFFFFFFFFFFFFFF WHY DOES IT NOT WORK TEST
