@@ -11,3 +11,14 @@ Sources: https://raw.githubusercontent.com/MegEngine/Models/master/official/nlp/
 - [ ] Build a pipeline which preprocesses the datasets into AMR graphs for loading (still needs to be done but coordinate with David who works on the dataset preprocessing pipeline above & coordinate with Matthias who is reading in the pickled )
 - [ ] Think about how exactly we build our graph from the AMR (maybe we should do this later, )
 - [ ] load in preprocessed AMR graphs (@Matthias started this)
+
+
+
+
+-----
+
+- [ ] 
+
+
+
+

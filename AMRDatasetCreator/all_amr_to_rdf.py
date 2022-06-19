@@ -14,13 +14,17 @@ for json_file in all_json_files:
     json_path = Path(json_file)
     splitted_stem = json_path.stem.split('_')
     dataset, split = splitted_stem[2], splitted_stem[3]
+
     if dataset == 'mnli':
         split = splitted_stem[4]
-        if splitted_stem[3] == 'mismatched':
+        if splitted_stem[3] in ['mismatched', 'matched']:
             split = split + '2'
+
     if split == 'validation':
         split = 'dev'
+
     print(dataset, split)
+
     dataset = dataset_lookup_table[dataset] if dataset in dataset_lookup_table.keys() else dataset.upper()
     os.makedirs(f'../amr_rdf_graphs/{dataset}/', exist_ok=True)
 

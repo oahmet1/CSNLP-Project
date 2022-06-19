@@ -3,10 +3,13 @@
 *.json
 *.metadata
 *.rdf
+*.ckpt
 lsf.*
 .idea/
 data/
 output_dir/
+Executions/
+*.pkl
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,3 +1,5 @@
+import pickle
+
 from datasets import load_dataset
 import amrlib
 from amrlib.alignments.rbw_aligner import RBWAligner
@@ -12,6 +14,7 @@ import sys
 
 class SemanticEntailmentAMRDataset:
     def __init__(self, dataset_name, amr_parser_path='/cluster/scratch/zdavid/models/model_parse_xfm_bart_base-v0_1_0'):
+
         self.amr_parser = amrlib.load_stog_model(amr_parser_path)
         self.dataset_name = dataset_name
         self.nlp_tokenizer = spacy.load('en_core_web_sm')
@@ -68,7 +71,7 @@ class SemanticEntailmentAMRDataset:
 
         processed_amr_sentence_alignment_pairs = []
         for aligned_amr_sentence in aligned_amr_sentences:
-            processed_amr_sentence_alignment_pairs.append((penman.encode(aligned_amr_sentence),self.__get_alignments(aligned_amr_sentence)))
+            processed_amr_sentence_alignment_pairs.append((aligned_amr_sentence, self.__get_alignments(aligned_amr_sentence)))
 
         print('All Tokens aligned')
 
@@ -102,9 +105,9 @@ def preprocess_all_data(tasks):
         ds = SemanticEntailmentAMRDataset(dataset)
         for task in tasks[dataset]:
             res = ds.to_amr(task)
-            f_name = f'amr_data_{dataset}_{task}.json'
-            with open(f_name, 'w') as f:
-                json.dump(res,f)
+            f_name = f'amr_data_{dataset}_{task}.pkl'
+            with open(f_name, 'wb') as f:
+                pickle.dump(res, f)
             print(f'Just finished {f_name}')
 
 
@@ -114,7 +117,7 @@ if __name__ == '__main__':
     # enter all tasks that should be prepared
     combos = {
         'hans': ['train', 'validation'],
-        'mnli': ['test_matched', 'test_mismatched', 'train', 'validation_mismatched', 'validation_matched'],
+        'mnli': ['train'],
         'cola': ['test', 'train', 'validation'],
         'mnli_matched': ['test', 'validation'],
         'mnli_mismatched': ['test', 'validation'],
