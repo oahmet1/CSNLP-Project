@@ -60,18 +60,42 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
         if sent_b_masks is not None and attention_mask is not None:
             assert (sent_b_masks & attention_mask == sent_b_masks).all()
 
-        model_output = self.transformer(
-            input_ids=input_ids,
-            attention_mask=attention_mask.long() if attention_mask is not None else None,
-            token_type_ids=token_type_ids,
-        )
+        # TODO: case where we want to use the static RoBERTa input embeddings instead of the contextualized embeddings
+        if self.static_embeddings == 1:
+            embeddings = self.transformer.model.embeddings.word_embeddings(input_ids)
+            # print(self.transformer.model.embeddings.word_embeddings(torch.tensor(17, device=input_ids.get_device())))
+            last_layers = embeddings
 
-        # TODO: check if this is supposed to be last_layers, versus last_hidden_state
-        last_layers, pooler_output = model_output['last_hidden_state'], model_output['pooler_output']
-        # print(model_output)
+            # TODO: NOTE that this is just a fix for the code to work, as it is only relevant if one uses:
+            #  "if self.args.separate_losses_ratio is not None"
+            # transformer_output = torch.tensor(0.0, device=input_ids.get_device())
+            transformer_output = torch.zeros([embeddings.shape[0], embeddings.shape[2]], device=input_ids.get_device())
+            # transformer_output = torch.zeros([embeddings.shape[0], embeddings.shape[2]])
+        else:
 
-        transformer_output = self.dropout(pooler_output)  # (bsz, transformer_dim)
+            model_output = self.transformer(
+                input_ids=input_ids,
+                attention_mask=attention_mask.long() if attention_mask is not None else None,
+                token_type_ids=token_type_ids,
+            )
 
+            # TODO: check if this is supposed to be last_layers, versus last_hidden_state
+            last_layers, pooler_output = model_output['last_hidden_state'], model_output['pooler_output']
+            transformer_output = self.dropout(pooler_output)  # (bsz, transformer_dim)
+
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - model_output:   {model_output}")
+
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - last_layers:   {last_layers}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - last_layers:   {last_layers.shape}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - pooler_output:   {pooler_output}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - pooler_output:   {pooler_output.shape}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - transformer_output:   {transformer_output}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - transformer_output:   {transformer_output.shape}")
+            # static_e = self.transformer.model.embeddings.word_embeddings(input_ids)
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - fake embeddings:   {static_e}")
+            # print(f"RGCN_SEMANTIC_ENCODER - forward() - fake embeddings:   {static_e.shape}")
+
+        # exit(-42)
         # rgcn
         rgcn_output = None
         if self.use_semantic_graph:
@@ -226,6 +250,14 @@ class RGCNSemanticEncoderBase(SemanticEncoder):
         parser.add_argument("--final_dropout",
                             action='store_true',
                             help="Whether to add a final dropout to the graph encoder output before combining it with the transformer output.")
+        parser.add_argument("--static_embeddings",
+                            default=0,
+                            type=int,
+                            help="Whether to use the static embeddings given by the pretrained roberta model or the contextualized embeddings ouput by roberta")
+        parser.add_argument("--fixed_encoder",
+                            default=0,
+                            type=int,
+                            help="Whether to fix the transformer encoder or to finetune the transformer")
 
         return parser
 
@@ -258,6 +290,7 @@ class RGCNSemanticEncoder(RGCNSemanticEncoderBase):
             if self.use_semantic_graph and self.args.post_combination_layernorm:
                 output = self.post_combination_layernorm(output)
             logits = self.classifier(output)
+            # del output
             return {'logits': logits}
 
     def compute_loss(self, output_dict, labels):

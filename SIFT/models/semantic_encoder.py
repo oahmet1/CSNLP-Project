@@ -49,6 +49,9 @@ class SemanticEncoder(BaseLightningModel):
         self.use_semantic_graph = args.formalism is not None
         self.formalism = args.formalism
 
+        self.static_embeddings = args.static_embeddings
+        self.fixed_encoder = args.fixed_encoder
+
         self.output_mode = output_modes[args.task]
         self.metric_to_watch = metric_to_watch[args.task]
         self.metric_watch_mode = metric_watch_mode[args.task]
@@ -58,6 +61,13 @@ class SemanticEncoder(BaseLightningModel):
         # transformer
         self.num_labels = tasks_num_labels.get(args.task)
         self.transformer = PretrainedTransformer(args, num_labels=self.num_labels)
+
+        # TODO: test if finetuning the transformer encoder needs to be finetuned....
+        if self.fixed_encoder == 1:
+            print("THE ENCODER WAS SET TO FIXED WEIGHTS!!!")
+            for param in self.transformer.model.base_model.parameters():
+                param.requires_grad = False
+
         self.dropout = nn.Dropout(self.transformer.config.hidden_dropout_prob)
 
         assert args.activation in ACT2FN
