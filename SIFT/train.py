@@ -67,7 +67,7 @@ class LoggingCallback(pl.Callback):
                         }
 
             logger.info(f"best_epoch = {self.best_epoch}")
-            # TODO: THIS IS NOT A FIX THIS IS A WTFFFFFFFFFFFFFFF WHY DOES IT NOT WORK TEST
+            # rewrote this line as we do not have a best_dev_metric at the beginning
             if self.best_dev_metrics is not None:
                 for key, value in sorted(self.best_dev_metrics.items()):
                     logger.info(f"best_{key} = {value}")
@@ -210,6 +210,7 @@ def main():
         trainer.fit(model)
         if local_rank <= 0:
             os.symlink(checkpoint_callback.best_model_path.split('/')[-1], Path(checkpoint_callback.best_model_path).parent / 'best.ckpt')
+
 
 if __name__ == "__main__":
     main()

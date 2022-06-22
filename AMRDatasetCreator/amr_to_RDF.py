@@ -33,8 +33,8 @@ def parse_amr(obj, remove_isolate_nodes=True):
         print('vars', penman_graph.variables())
         print('instances', penman_graph.instances())
 
-    print('edges: ', penman_graph.edges())
-    print('attributes: ', penman_graph.attributes())
+        print('edges: ', penman_graph.edges())
+        print('attributes: ', penman_graph.attributes())
 
     for edge in penman_graph.edges():
         source, role, target = edge.source, edge.role, edge.target
@@ -110,6 +110,10 @@ def parse_amr(obj, remove_isolate_nodes=True):
         metadata = {}
         if id in graph_to_token_alignments:
             corresponding_token = graph_to_token_alignments[id][0]
+            if(len(graph_to_token_alignments[id]) > 1):
+                print("multialignment found")
+                print(graph_to_token_alignments[id])
+                exit(-1)
             # TODO change here if you want to support multialignment.
             anchors = token_range[corresponding_token]
             if DEBUG:

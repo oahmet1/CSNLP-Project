@@ -3,6 +3,7 @@ from transformers.data.metrics import acc_and_f1, glue_compute_metrics, simple_a
 def compute_metrics(task_name, preds, labels):
     assert len(preds) == len(labels)
     metrics = glue_compute_metrics(task_name, preds, labels)
+
     if task_name in ('mrpc', 'qqp'):
         del metrics['acc_and_f1']
     elif task_name == 'sts-b':
@@ -20,6 +21,7 @@ metric_to_watch = {
     'qnli': 'acc',
     'rte': 'acc',
     'wnli': 'acc',
+    'hans': 'acc'
 }
 
 metric_watch_mode = {k: 'max' for k in metric_to_watch.keys()}

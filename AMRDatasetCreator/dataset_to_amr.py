@@ -78,10 +78,19 @@ class SemanticEntailmentAMRDataset:
         return processed_amr_sentence_alignment_pairs
 
     def __aligned_AMR(self, amr_graph_string, sentence):
-        pg = add_lemmas(amr_graph_string, snt_key='snt')
-        aligner = RBWAligner.from_penman_w_json(pg)
-        penman_graph = aligner.get_penman_graph()
-        return penman_graph
+        try:
+            pg = add_lemmas(amr_graph_string, snt_key='snt')
+            aligner = RBWAligner.from_penman_w_json(pg)
+            penman_graph = aligner.get_penman_graph()
+            return penman_graph
+
+        except Exception as ex:
+            print(ex)
+            print('graph is : \n\n', amr_graph_string, '\n\n sentence is:',sentence, '\n\n' )
+            return penman.Graph()
+
+        except:
+            print(f'Hopefully never triggered.')
 
 
     def __get_alignments(self, penman_graph):

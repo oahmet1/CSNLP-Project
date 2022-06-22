@@ -40,7 +40,7 @@ from transformers import (
 logger = logging.getLogger(__name__)
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=False)
 class InputExample:
     """
     A single training/test example for simple sequence classification.
@@ -255,7 +255,15 @@ class HansProcessor(DataProcessor):
 
     def get_dev_examples(self, data_dir):
         """See base class."""
+        print('')
         return self._create_examples(self._read_tsv(os.path.join(data_dir, "heuristics_evaluation_set.txt")), "dev")
+
+    def get_test_examples(self, data_dir):
+        """See base class."""
+        return self._create_examples(self._read_tsv(os.path.join(data_dir, "heuristics_evaluation_set.txt")), "test")
+
+
+
 
     def get_labels(self):
         """See base class.
@@ -263,7 +271,8 @@ class HansProcessor(DataProcessor):
         (see :class:`~transformers.data.processors.utils.MnliProcessor`)
         but the HANS evaluation groups `contradiction` and `neutral` into `non-entailment` (label 0) while
         `entailment` is label 1."""
-        return ["contradiction", "entailment", "neutral"]
+        # return ["non-entailment", "entailment"]
+        return ["non-entailment", "entailment", "neutral"]
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""
