@@ -28,7 +28,7 @@ for json_file in all_json_files:
     dataset = dataset_lookup_table[dataset] if dataset in dataset_lookup_table.keys() else dataset.upper()
     os.makedirs(f'../amr_rdf_graphs/{dataset}/', exist_ok=True)
 
-    os.system(f'python amr_to_RDF.py {json_path.name} ../amr_rdf_graphs/{dataset}/{split}.amr.rdf ../amr_rdf_graphs/{dataset}/{split}.amr.metadata')
+    os.system(f'python amr_to_RDF.py {json_path.name} ../amr_rdf_graphs/{dataset}/{split}.amr.rdf ../amr_rdf_graphs/{dataset}/{split}.amr.metadata &')
     # os.system(f'rsync -av --progress ../amr_rdf_graphs/ ../SIFT/data/glue_data/ --dry-run')
 
 

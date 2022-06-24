@@ -5,6 +5,7 @@ from penman import surface
 import torch
 import pickle
 
+from penman.graph import Attribute, Instance
 from penman.models.noop import NoOpModel
 from rdflib import Graph, Literal
 import sys
@@ -100,25 +101,62 @@ def parse_amr(obj, remove_isolate_nodes=True):
     for key, value in surface.alignments(penman_graph).items():
         node = key[0]
         node_id = index_to_new_index[node_to_index[node]]
-        graph_to_token_alignments[node_id] = value.indices
+        if DEBUG:
+            print('align:', key, value, node_id)
+        if node_id not in graph_to_token_alignments:
+            graph_to_token_alignments[node_id] = []
+
+        for v in value.indices:
+            graph_to_token_alignments[node_id].append(v)
 
     if DEBUG:
         print(index_to_new_index)
         print(node_to_index)
+        print('tokenalignments are: ', graph_to_token_alignments)
 
+    # print(f"graph to token alignments:   {graph_to_token_alignments}")
     for id, node in enumerate(graph_nodes):
         metadata = {}
         if id in graph_to_token_alignments:
-            corresponding_token = graph_to_token_alignments[id][0]
-            if(len(graph_to_token_alignments[id]) > 1):
-                print("multialignment found")
-                print(graph_to_token_alignments[id])
-                exit(-1)
-            # TODO change here if you want to support multialignment.
-            anchors = token_range[corresponding_token]
+            corresponding_tokens = graph_to_token_alignments[id]
+            anchors = []
+            for token in corresponding_tokens:
+                anchors.append(token_range[token])
             if DEBUG:
                 print(anchors)
             metadata['anchors'] = anchors
+        else:
+            # we are at a node that is not aligned
+            # code source: https://stackoverflow.com/questions/2568673/inverse-dictionary-lookup-in-python
+            prev_id = next(key for key, value in index_to_new_index.items() if value == id)
+            #print(f"prev_id:   {prev_id}")
+            penman_id = next(key for key, value in node_to_index.items() if value == prev_id)
+            # first check if it is an instance
+            instance_list = list(filter(lambda x: x.source == penman_id, penman_graph.instances()))
+            attribute_list = list(filter(lambda x: x.target == penman_id, penman_graph.attributes()))
+
+            if len(instance_list) > 0:
+                target = instance_list[0].target
+            elif len(attribute_list) > 0:
+                target = attribute_list[0].target
+            else:
+                target = None
+
+            # target handling
+
+            if target == "-":
+                transformed_target = 'not'
+            elif target[0] == '\"' and target[-1] == '\"':
+                transformed_target = target.strip('"')
+            elif target.isnumeric():
+                transformed_target = target
+            else:
+                transformed_target = target.strip('-01234567890')
+                # transformed_target=None
+
+            # print(transformed_target)
+            # relevant_penman_triple = list(filter(lambda x: x[0] == penman_id, penman_graph.triples))
+            metadata['amr_unaligned'] = transformed_target
 
         graph_metadata.append(metadata)
 
@@ -171,9 +209,8 @@ def process(file_name):
 
 if __name__ == '__main__':
     input_file, graph_output_file, metadata_output_file = sys.argv[1], sys.argv[2], sys.argv[3]
-    #input_file = 'amr_data_cola_train.json'
     all_graphs, all_metadata = process(input_file)
-
+    # print(all_metadata)
     pickle.dump(all_graphs, open(graph_output_file, 'wb'))
     pickle.dump(all_metadata, open(metadata_output_file, 'wb'))
 
