@@ -1,12 +1,12 @@
 #!/usr/bin/zsh
 #rm -r output_dir
-rm -r ../Executions/local013
+rm -r ../Executions/local015
 
 TOKENIZERS_PARALLELISM=true
 PYTORCH_CUDA_ALLOC_CONF=max_split_size_mb:2048
 
 python train.py \
-    --do_train --task rte --data_dir data/glue_data/RTE --output_dir ../Executions/local013 \
+    --do_train --task rte --data_dir data/glue_data/RTE --output_dir ../Executions/local015 \
     --model_name_or_path roberta-base --max_seq_length 256 \
     --num_train_epochs 20 --train_batch_size 8 --gradient_accumulation_steps 4 --eval_batch_size 16 \
     --learning_rate 2e-5 --warmup_ratio 0.06 --weight_decay 0.1 \

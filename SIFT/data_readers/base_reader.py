@@ -13,7 +13,7 @@ import torch
 from tqdm import tqdm
 
 from .rdf2dgl import relations_in, rdf2dgl
-
+from transformers import pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -224,11 +224,18 @@ def _calc_wpidx2graphid(anchors, wp_offsets):
         List[List[bool]]
     """
     wpidx2graphid = [[False] * len(anchors) for _ in range(len(wp_offsets))]
-    # There's probably an O(n) way to do this but the lists are usually short anyway
+
     for wp_idx, wp_span in enumerate(wp_offsets):
-        for graph_id, node_span in enumerate(anchors):
-            if node_span is not None and _spans_overlap(wp_span, node_span):
-                wpidx2graphid[wp_idx][graph_id] = True
+        for graph_id, node_spans in enumerate(anchors):
+            # if we have a list of alignments - AMR
+            if isinstance(node_spans, list):
+                for node_span in node_spans:
+                    if node_span is not None and _spans_overlap(wp_span, node_span):
+                        wpidx2graphid[wp_idx][graph_id] = True
+            else:
+                node_span = node_spans
+                if node_span is not None and _spans_overlap(wp_span, node_span):
+                    wpidx2graphid[wp_idx][graph_id] = True
 
     return wpidx2graphid
 
@@ -280,6 +287,9 @@ def convert_examples_to_features(
     all_special_token_ids = {tokenizer.bos_token_id, tokenizer.eos_token_id, tokenizer.sep_token_id, tokenizer.cls_token_id}
 
     features = []
+
+
+
     for i, example in enumerate(examples):
         inputs = {k: batch_encoding[k][i] for k in batch_encoding if k != "offset_mapping"}
         if "attention_mask" in inputs:
@@ -322,10 +332,35 @@ def convert_examples_to_features(
             for graph, wp_offsets in to_enumerate:
                 if graph is None: continue
                 anchors = [metadata.get('anchors') for metadata in graph.gdata['metadata']]
+
+                amr_unaligned = [metadata.get('amr_unaligned') for metadata in graph.gdata['metadata']]
+
                 wpidx2graphid = torch.tensor(_calc_wpidx2graphid(anchors, wp_offsets), dtype=torch.bool)  # (n_wp, n_nodes)
                 graph.gdata['wpidx2graphid'] = wpidx2graphid # TODO: if we really want to have some fun we can make this a sparse tensor
-                del graph.gdata['metadata']  # save memory
 
+                amr_unaligned_embeddings = torch.zeros((len(amr_unaligned), 768))
+
+                for i, entry in enumerate(amr_unaligned):
+                    if entry == None:
+                        continue
+                    else:
+                        pass
+                        # amr_unaligned_embeddings[i] = tokenizer(entry)
+                        # print(tokenizer.vocab)
+                        # print(tokenizer.encode(entry))
+                        print(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
+                        # amr_unaligned_embeddings[i] = tokenizer.vocab[tokenizer.encode(entry[1])]
+                        # print(amr_unaligned_embeddings[i])
+                    # fill the matrix here
+                # exit()
+
+                print('tokenizer is ', amr_unaligned_embeddings)
+                # is this a good idea?
+                graph.gdata['token'] = amr_unaligned_embeddings
+
+
+                del graph.gdata['metadata']  # save memory
+        # exit()
         feature = InputFeatures(**inputs, sent_a_mask=sent_a_mask, sent_b_mask=sent_b_mask, graph_a=graph_a, graph_b=graph_b, label=label)
         features.append(feature)
 

@@ -141,6 +141,26 @@ class SemanticEncoder(BaseLightningModel):
         node_embeddings = torch.where(expanded_wpidx2graphid.any(1), node_embeddings, torch.tensor(0., device=device))  # some nodes don't have corresponding wordpieces
         node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
 
+        # here we can iterate through all nodes and set the static embeddings
+
+        # print(self.transformer)
+        # print(self.transformer.model.embeddings.word_embeddings(torch.Tensor(1, device=device).int()))
+        print(self.transformer.model.embeddings.word_embeddings(torch.tensor(1, dtype=torch.int, device=device)))
+        print(self.transformer.model.embeddings)
+        print(self.transformer.model.embeddings.word_embeddings)
+        # print(self.transformer.RobertaEmbeddings.word_embeddings())
+        exit()
+
+        # for mod in self.transformer.modules():
+        #     print(mod)
+
+        print(self.transformer.layers)
+
+
+        print(f'gdata is ', gdata['token'])
+        #
+        print('tokenizer is: ', self.tokenizer)
+
         return node_embeddings, node_embeddings_mask
 
     def _check_input(self, *inputs):
