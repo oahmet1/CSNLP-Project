@@ -13,7 +13,7 @@ import sys
 
 
 class SemanticEntailmentAMRDataset:
-    def __init__(self, dataset_name, amr_parser_path='/cluster/scratch/zdavid/models/model_parse_xfm_bart_base-v0_1_0'):
+    def __init__(self, dataset_name, amr_parser_path='/home/david/tmp/model_parse_xfm_bart_base-v0_1_0'):
 
         self.amr_parser = amrlib.load_stog_model(amr_parser_path)
         self.dataset_name = dataset_name
@@ -87,8 +87,9 @@ class SemanticEntailmentAMRDataset:
         except Exception as ex:
             print(ex)
             print('graph is : \n\n', amr_graph_string, '\n\n sentence is:',sentence, '\n\n' )
-            return penman.Graph()
-
+            g = penman.Graph()
+            g.metadata['snt'] = sentence
+            return g
         except:
             print(f'Hopefully never triggered.')
 
@@ -97,8 +98,9 @@ class SemanticEntailmentAMRDataset:
         # returns an array where the i-th entry is a 2-tuple of the start and end characters index of the word (the last exclusive!)
         alignments = []
         ref_token = self.nlp_tokenizer(penman_graph.metadata['snt'])
-        for i, token in enumerate(json.loads(penman_graph.metadata['tokens'])):
-            assert token == ref_token[i].text, f'token are unexpectedly different {token} - {ref_token[i].text}'
+        # check if has attribute tokens
+        for i in range(len(ref_token)):
+            # assert token == ref_token[i].text, f'token are unexpectedly different {token} - {ref_token[i].text}'
             alignments.append((ref_token[i].idx, ref_token[i].idx + len(ref_token[i])))
         return alignments
 
