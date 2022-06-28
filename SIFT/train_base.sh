@@ -13,4 +13,5 @@ python train.py \
     --formalism amr --n_graph_layers 2 --n_graph_attn_composition_layers 2 \
     --graph_n_bases 80 --graph_dim 512 --post_combination_layernorm \
     --gpus 1 --numworkers 3 --static_embeddings 0 --fixed_encoder 0 \
+    --amr_version 1
 #    --separate_losses_ratio 0.0

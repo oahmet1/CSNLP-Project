@@ -340,6 +340,7 @@ def convert_examples_to_features(
 
                 amr_unaligned_embeddings = torch.zeros((len(amr_unaligned), 768))
 
+                all_token_ids = []
                 for i, entry in enumerate(amr_unaligned):
                     if entry == None:
                         continue
@@ -349,14 +350,15 @@ def convert_examples_to_features(
                         # print(tokenizer.vocab)
                         # print(tokenizer.encode(entry))
                         print(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
+                        all_token_ids.append(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
                         # amr_unaligned_embeddings[i] = tokenizer.vocab[tokenizer.encode(entry[1])]
                         # print(amr_unaligned_embeddings[i])
                     # fill the matrix here
                 # exit()
 
-                print('tokenizer is ', amr_unaligned_embeddings)
+                print('all token ids ', all_token_ids)
                 # is this a good idea?
-                graph.gdata['token'] = amr_unaligned_embeddings
+                graph.gdata['token_ids'] = all_token_ids
 
 
                 del graph.gdata['metadata']  # save memory
