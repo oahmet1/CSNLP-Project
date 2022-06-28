@@ -171,8 +171,10 @@ class SemanticEncoder(BaseLightningModel):
         # print(node_embeddings.device)
         # print(gdata['amr_unaligned_embeddings'].device)
         if self.amr_version == 1:
-            node_embeddings += gdata['amr_unaligned_embeddings'].to(node_embeddings.device)
-
+            unaligned_embeddings = gdata['amr_unaligned_embeddings'].to(node_embeddings.device)
+            unaligned_embeddings.requires_grad = False
+            node_embeddings = torch.add(unaligned_embeddings, node_embeddings)
+        print(node_embeddings)
         # print(f'gdata is ', gdata['token'])
         #
         # print('tokenizer is: ', self.tokenizer)
