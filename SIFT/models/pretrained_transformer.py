@@ -4,7 +4,7 @@ import pytorch_lightning as pl
 from torch import nn
 
 from transformers import AutoConfig, AutoModel, AutoTokenizer
-
+from transformers import pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +33,7 @@ class PretrainedTransformer(pl.LightningModule):
             config=self.config,
             cache_dir=cache_dir,
         )
+        # self.fe_pipeline = pipeline('feature-extraction', model=self.model, tokenizer=self.tokenizer)
 
     def forward(self, **inputs):
         return self.model(**inputs)

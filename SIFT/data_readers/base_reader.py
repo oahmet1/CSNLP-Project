@@ -13,7 +13,7 @@ import torch
 from tqdm import tqdm
 
 from .rdf2dgl import relations_in, rdf2dgl
-
+from transformers import pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -224,11 +224,18 @@ def _calc_wpidx2graphid(anchors, wp_offsets):
         List[List[bool]]
     """
     wpidx2graphid = [[False] * len(anchors) for _ in range(len(wp_offsets))]
-    # There's probably an O(n) way to do this but the lists are usually short anyway
+
     for wp_idx, wp_span in enumerate(wp_offsets):
-        for graph_id, node_span in enumerate(anchors):
-            if node_span is not None and _spans_overlap(wp_span, node_span):
-                wpidx2graphid[wp_idx][graph_id] = True
+        for graph_id, node_spans in enumerate(anchors):
+            # if we have a list of alignments - AMR
+            if isinstance(node_spans, list):
+                for node_span in node_spans:
+                    if node_span is not None and _spans_overlap(wp_span, node_span):
+                        wpidx2graphid[wp_idx][graph_id] = True
+            else:
+                node_span = node_spans
+                if node_span is not None and _spans_overlap(wp_span, node_span):
+                    wpidx2graphid[wp_idx][graph_id] = True
 
     return wpidx2graphid
 
@@ -239,6 +246,8 @@ def convert_examples_to_features(
     task=None,
     max_length=None,
     graphs=None,
+    transformer=None,
+    amr_version=None
 ):
     """
     Loads a data file into a list of ``InputFeatures``
@@ -280,6 +289,9 @@ def convert_examples_to_features(
     all_special_token_ids = {tokenizer.bos_token_id, tokenizer.eos_token_id, tokenizer.sep_token_id, tokenizer.cls_token_id}
 
     features = []
+
+
+
     for i, example in enumerate(examples):
         inputs = {k: batch_encoding[k][i] for k in batch_encoding if k != "offset_mapping"}
         if "attention_mask" in inputs:
@@ -322,8 +334,38 @@ def convert_examples_to_features(
             for graph, wp_offsets in to_enumerate:
                 if graph is None: continue
                 anchors = [metadata.get('anchors') for metadata in graph.gdata['metadata']]
+
+                amr_unaligned = [metadata.get('amr_unaligned') for metadata in graph.gdata['metadata']]
+
                 wpidx2graphid = torch.tensor(_calc_wpidx2graphid(anchors, wp_offsets), dtype=torch.bool)  # (n_wp, n_nodes)
                 graph.gdata['wpidx2graphid'] = wpidx2graphid # TODO: if we really want to have some fun we can make this a sparse tensor
+
+                amr_unaligned_embeddings = torch.zeros((len(amr_unaligned), 768))
+
+                if amr_version == 1:
+                    for i, entry in enumerate(amr_unaligned):
+                        if entry is None:
+                            continue
+                        else:
+                            # print(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
+                            token_ids = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry))
+                            # amr_unaligned_embeddings[i] = tokenizer.vocab[tokenizer.encode(entry[1])]
+                                # fill the matrix here
+                            # exit()
+
+                            # here we can iterate through all nodes and set the static embeddings
+                            # TODOOOOOOOOOOOOOOOOO:
+                            print(f"all_token_ids loaded in semantic encoder:   {token_ids}")
+                            print(f"all_token_ids length:   {len(token_ids)}")
+                            with torch.no_grad():
+                                for token_id in token_ids:
+                                    amr_unaligned_embeddings[i] += transformer.model.embeddings.word_embeddings(
+                                        torch.tensor(token_id, dtype=torch.int, device="cpu"))
+
+                                amr_unaligned_embeddings[i] = amr_unaligned_embeddings[i] / len(token_ids)
+
+                graph.gdata['amr_unaligned_embeddings'] = amr_unaligned_embeddings
+
                 del graph.gdata['metadata']  # save memory
 
         feature = InputFeatures(**inputs, sent_a_mask=sent_a_mask, sent_b_mask=sent_b_mask, graph_a=graph_a, graph_b=graph_b, label=label)

@@ -45,6 +45,7 @@ class SemanticEncoder(BaseLightningModel):
         args.task = args.task.lower()
 
         self.num_workers = args.numworkers
+        self.amr_version = args.amr_version
 
         self.use_semantic_graph = args.formalism is not None
         self.formalism = args.formalism
@@ -141,6 +142,41 @@ class SemanticEncoder(BaseLightningModel):
         node_embeddings = torch.where(expanded_wpidx2graphid.any(1), node_embeddings, torch.tensor(0., device=device))  # some nodes don't have corresponding wordpieces
         node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
 
+
+        # if self.amr_version == 1:
+        #     # here we can iterate through all nodes and set the static embeddings
+        #     # TODOOOOOOOOOOOOOOOOO:
+        #     all_token_ids = gdata[0]["token_ids"]
+        #     print(f"all_token_ids loaded in semantic encoder:   {all_token_ids}")
+        #     print(f"all_token_ids length:   {len(all_token_ids)}")
+        #     with torch.no_grad:
+        #         for token_id_list in all_token_ids:
+        #             embedding_sum = None
+        #             for token_id in token_id_list:
+        #                 embedding_sum += self.transformer.model.embeddings.word_embeddings(torch.tensor(token_id, dtype=torch.int, device=device))
+        #
+        #             embedding_sum /= len(token_id_list)
+
+        # print(self.transformer)
+        # print(self.transformer.model.embeddings.word_embeddings(torch.Tensor(1, device=device).int()))
+        # print(self.transformer.model.embeddings.word_embeddings(torch.tensor(1, dtype=torch.int, device=device)))
+        # print(self.transformer.model.embeddings)
+        # print(self.transformer.model.embeddings.word_embeddings)
+        # print(self.transformer.RobertaEmbeddings.word_embeddings())
+
+
+        # print(gdata['amr_unaligned_embeddings'].shape)
+        # print("\n\n\n")
+        # print(node_embeddings.shape)
+        # print(node_embeddings.device)
+        # print(gdata['amr_unaligned_embeddings'].device)
+        if self.amr_version == 1:
+            node_embeddings += gdata['amr_unaligned_embeddings'].to(node_embeddings.device)
+
+        # print(f'gdata is ', gdata['token'])
+        #
+        # print('tokenizer is: ', self.tokenizer)
+
         return node_embeddings, node_embeddings_mask
 
     def _check_input(self, *inputs):
@@ -220,6 +256,8 @@ class SemanticEncoder(BaseLightningModel):
                 args.task,
                 max_length=args.max_seq_length,
                 graphs=graphs[split] if graphs is not None else None,
+                transformer=self.transformer,
+                amr_version=self.amr_version
             )
 
         logger.info("Saving features into cached file %s", cached_features_file)
@@ -408,6 +446,12 @@ class SemanticEncoder(BaseLightningModel):
             type=int,
             # choices=ACT2FN.keys(),
             help=f"How many workers the Dataloaders create",
+        )
+        parser.add_argument(
+            "--amr_version",
+            default=0,
+            type=int,
+            help=f"which amr version to use, e.g. the simple one is 0 and the one where we read additional static embeddings is 1"
         )
 
         return parser
