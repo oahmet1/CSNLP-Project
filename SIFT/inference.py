@@ -136,6 +136,7 @@ def reset_test_dataloader(model, trainer, inference_task, inference_data_dir):
     else:
         graphs = None
 
+    # TODO add transformer=self.transformer     amr_version=self.amr_version
     data_features = {'test': convert_examples_to_features(test_examples, model.transformer.tokenizer, inference_task, model.args.max_seq_length, graphs)}
     model.data_features = data_features
     model.has_secondary_split = False  # if there's a separate inference task, we just do one split

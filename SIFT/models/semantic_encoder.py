@@ -143,19 +143,19 @@ class SemanticEncoder(BaseLightningModel):
         node_embeddings_mask = torch.arange(max(batch_num_nodes), device=device).expand(bsz, -1) < torch.tensor(batch_num_nodes, dtype=torch.long, device=device).unsqueeze(1)
 
 
-        if self.amr_version == 1:
-            # here we can iterate through all nodes and set the static embeddings
-            # TODOOOOOOOOOOOOOOOOO:
-            all_token_ids = gdata[0]["token_ids"]
-            print(f"all_token_ids loaded in semantic encoder:   {all_token_ids}")
-            print(f"all_token_ids length:   {len(all_token_ids)}")
-            with torch.no_grad:
-                for token_id_list in all_token_ids:
-                    embedding_sum = None
-                    for token_id in token_id_list:
-                        embedding_sum += self.transformer.model.embeddings.word_embeddings(torch.tensor(token_id, dtype=torch.int, device=device))
-
-                    embedding_sum /= len(token_id_list)
+        # if self.amr_version == 1:
+        #     # here we can iterate through all nodes and set the static embeddings
+        #     # TODOOOOOOOOOOOOOOOOO:
+        #     all_token_ids = gdata[0]["token_ids"]
+        #     print(f"all_token_ids loaded in semantic encoder:   {all_token_ids}")
+        #     print(f"all_token_ids length:   {len(all_token_ids)}")
+        #     with torch.no_grad:
+        #         for token_id_list in all_token_ids:
+        #             embedding_sum = None
+        #             for token_id in token_id_list:
+        #                 embedding_sum += self.transformer.model.embeddings.word_embeddings(torch.tensor(token_id, dtype=torch.int, device=device))
+        #
+        #             embedding_sum /= len(token_id_list)
 
         # print(self.transformer)
         # print(self.transformer.model.embeddings.word_embeddings(torch.Tensor(1, device=device).int()))
@@ -163,17 +163,19 @@ class SemanticEncoder(BaseLightningModel):
         # print(self.transformer.model.embeddings)
         # print(self.transformer.model.embeddings.word_embeddings)
         # print(self.transformer.RobertaEmbeddings.word_embeddings())
-        exit()
-
-        # for mod in self.transformer.modules():
-        #     print(mod)
-
-        print(self.transformer.layers)
 
 
-        print(f'gdata is ', gdata['token'])
+        # print(gdata['amr_unaligned_embeddings'].shape)
+        # print("\n\n\n")
+        # print(node_embeddings.shape)
+        # print(node_embeddings.device)
+        # print(gdata['amr_unaligned_embeddings'].device)
+        if self.amr_version == 1:
+            node_embeddings += gdata['amr_unaligned_embeddings'].to(node_embeddings.device)
+
+        # print(f'gdata is ', gdata['token'])
         #
-        print('tokenizer is: ', self.tokenizer)
+        # print('tokenizer is: ', self.tokenizer)
 
         return node_embeddings, node_embeddings_mask
 
@@ -254,6 +256,8 @@ class SemanticEncoder(BaseLightningModel):
                 args.task,
                 max_length=args.max_seq_length,
                 graphs=graphs[split] if graphs is not None else None,
+                transformer=self.transformer,
+                amr_version=self.amr_version
             )
 
         logger.info("Saving features into cached file %s", cached_features_file)

@@ -246,6 +246,8 @@ def convert_examples_to_features(
     task=None,
     max_length=None,
     graphs=None,
+    transformer=None,
+    amr_version=None
 ):
     """
     Loads a data file into a list of ``InputFeatures``
@@ -340,29 +342,32 @@ def convert_examples_to_features(
 
                 amr_unaligned_embeddings = torch.zeros((len(amr_unaligned), 768))
 
-                all_token_ids = []
-                for i, entry in enumerate(amr_unaligned):
-                    if entry == None:
-                        continue
-                    else:
-                        pass
-                        # amr_unaligned_embeddings[i] = tokenizer(entry)
-                        # print(tokenizer.vocab)
-                        # print(tokenizer.encode(entry))
-                        print(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
-                        all_token_ids.append(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
-                        # amr_unaligned_embeddings[i] = tokenizer.vocab[tokenizer.encode(entry[1])]
-                        # print(amr_unaligned_embeddings[i])
-                    # fill the matrix here
-                # exit()
+                if amr_version == 1:
+                    for i, entry in enumerate(amr_unaligned):
+                        if entry is None:
+                            continue
+                        else:
+                            # print(tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry)))
+                            token_ids = tokenizer.convert_tokens_to_ids(tokenizer.tokenize(entry))
+                            # amr_unaligned_embeddings[i] = tokenizer.vocab[tokenizer.encode(entry[1])]
+                                # fill the matrix here
+                            # exit()
 
-                print('all token ids ', all_token_ids)
-                # is this a good idea?
-                graph.gdata['token_ids'] = all_token_ids
+                            # here we can iterate through all nodes and set the static embeddings
+                            # TODOOOOOOOOOOOOOOOOO:
+                            print(f"all_token_ids loaded in semantic encoder:   {token_ids}")
+                            print(f"all_token_ids length:   {len(token_ids)}")
+                            with torch.no_grad():
+                                for token_id in token_ids:
+                                    amr_unaligned_embeddings[i] += transformer.model.embeddings.word_embeddings(
+                                        torch.tensor(token_id, dtype=torch.int, device="cpu"))
 
+                                amr_unaligned_embeddings[i] = amr_unaligned_embeddings[i] / len(token_ids)
+
+                graph.gdata['amr_unaligned_embeddings'] = amr_unaligned_embeddings
 
                 del graph.gdata['metadata']  # save memory
-        # exit()
+
         feature = InputFeatures(**inputs, sent_a_mask=sent_a_mask, sent_b_mask=sent_b_mask, graph_a=graph_a, graph_b=graph_b, label=label)
         features.append(feature)
 
