@@ -355,14 +355,22 @@ def convert_examples_to_features(
 
                             # here we can iterate through all nodes and set the static embeddings
                             # TODOOOOOOOOOOOOOOOOO:
-                            print(f"all_token_ids loaded in semantic encoder:   {token_ids}")
-                            print(f"all_token_ids length:   {len(token_ids)}")
+                            # print(f"all_token_ids loaded in semantic encoder:   {token_ids}")
+                            # print(f"all_token_ids length:   {len(token_ids)}")
                             with torch.no_grad():
                                 for token_id in token_ids:
                                     amr_unaligned_embeddings[i] += transformer.model.embeddings.word_embeddings(
                                         torch.tensor(token_id, dtype=torch.int, device="cpu"))
 
-                                amr_unaligned_embeddings[i] = amr_unaligned_embeddings[i] / len(token_ids)
+                                # TODO: The issue with nan might have come from division by 0 at this point!!!!
+                                if len(token_ids) != 0:
+                                    amr_unaligned_embeddings[i] = amr_unaligned_embeddings[i] / len(token_ids)
+                                else:
+                                    print(f"base reader -> division by zero avoided???")
+
+                                # TODO check if this is still necessary now!
+                                amr_unaligned_embeddings[i] = torch.nan_to_num(amr_unaligned_embeddings[i])
+
 
                 graph.gdata['amr_unaligned_embeddings'] = amr_unaligned_embeddings
 
