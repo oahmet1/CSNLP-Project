@@ -165,7 +165,10 @@ class SemanticEncoder(BaseLightningModel):
         # print(self.transformer.RobertaEmbeddings.word_embeddings())
 
 
-        # print(gdata['amr_unaligned_embeddings'].shape)
+        # print(f"gdata amr unaligned:     {gdata['amr_unaligned_embeddings']}")
+        # print(f"UNALIGNED is any nan?.... {torch.any(torch.isnan(gdata['amr_unaligned_embeddings']))}")
+        # print(f"node embeddigns:     {node_embeddings}")
+        # print(f"BEFORE is any nan?.... {torch.any(torch.isnan(node_embeddings))}")
         # print("\n\n\n")
         # print(node_embeddings.shape)
         # print(node_embeddings.device)
@@ -174,7 +177,7 @@ class SemanticEncoder(BaseLightningModel):
             unaligned_embeddings = gdata['amr_unaligned_embeddings'].to(node_embeddings.device)
             unaligned_embeddings.requires_grad = False
             node_embeddings = torch.add(unaligned_embeddings, node_embeddings)
-        print(node_embeddings)
+            # print(f"node embeddings AFTER is any nan?.... {torch.any(torch.isnan(node_embeddings))}")
         # print(f'gdata is ', gdata['token'])
         #
         # print('tokenizer is: ', self.tokenizer)
