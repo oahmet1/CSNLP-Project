@@ -5,6 +5,7 @@
 
 ## MNLI
 ### lsf.o223751116
+#### DONE
 output_dir_dm_static_mnli
 rm -rf ../../output_dir_dm_static_mnli
 
@@ -24,10 +25,12 @@ python train.py \
 
 
 ### lsf.o223751121
+#### DONE
 output_dir_dm_static_mnli2
 
 
 ### lsf.o223751133
+#### DONE
 output_dir_dm_fixed_mnli
 rm -rf ../../output_dir_dm_fixed_mnli
 
@@ -47,15 +50,16 @@ python train.py \
 
 
 ### lsf.o223751137
+#### DONE
 output_dir_dm_fixed_mnli2
 
 
+--------
 
 
+#### MNLI AMR does not work with 60gb of memory!!! need more??
 
-
-
-### lsf.223751573
+### lsf.o223876606                  TODOOOO
 output_dir_amr0_mnli
 rm -rf ../../output_dir_amr0_mnli
 
@@ -73,12 +77,13 @@ python train.py \
     --gpus 1 --numworkers 0 --static_embeddings 0 --fixed_encoder 0 \
     --amr_version 0
 
-### lsf.223751607
+### lsf.o223876625                  TODOOOO
 output_dir_amr0_mnli2
 
 
 
-### lsf.223751656
+### lsf.o223874678
+#### DONE
 output_dir_amr0_static_mnli
 rm -rf ../../output_dir_amr0_static_mnli
 
@@ -97,12 +102,13 @@ python train.py \
     --amr_version 0
 
 
-### lsf.223751664
+### lsf.o223855750
+#### DONE
 output_dir_amr0_static_mnli2
 
 
-
-### lsf.223751754
+### lsf.o223874737
+#### DONE
 output_dir_amr0_fixed_mnli
 rm -rf ../../output_dir_amr0_fixed_mnli
 
@@ -120,17 +126,20 @@ python train.py \
     --gpus 1 --numworkers 0 --static_embeddings 0 --fixed_encoder 1 \
     --amr_version 0
 
-### lsf.223751775
+### lsf.o223874771
+#### RUNNING (epoch 12)
 output_dir_amr0_fixed_mnli2
 
 
 
 
+------------------------------------
+TODO: BELOW!!!!!
 
 
 
 
-### lsf.223751789
+### lsf.o223875635              TODOOOO
 output_dir_amr1_mnli
 rm -rf ../../output_dir_amr1_mnli
 
@@ -148,12 +157,12 @@ python train.py \
     --gpus 1 --numworkers 0 --static_embeddings 0 --fixed_encoder 0 \
     --amr_version 1
 
-### lsf.223751795
+### lsf.o223875811              TODOOOO
 output_dir_amr1_mnli2
 
 
 
-### lsf.223751801
+### lsf.o223875463              TODOOOO
 output_dir_amr1_static_mnli
 rm -rf ../../output_dir_amr1_static_mnli
 
@@ -172,12 +181,13 @@ python train.py \
     --amr_version 1
 
 
-### lsf.223751811
+### lsf.o223875496              TODOOOO
 output_dir_amr1_static_mnli2
 
 
 
-### lsf.223751835
+### lsf.o223875341
+#### RUNNING (epoch 9)
 output_dir_amr1_fixed_mnli
 rm -rf ../../output_dir_amr1_fixed_mnli
 
@@ -196,7 +206,8 @@ python train.py \
     --amr_version 1
 
 
-### lsf.223751848
+### lsf.o223875391
+#### RUNNING (epoch 7)
 output_dir_amr1_fixed_mnli2
 
 
@@ -204,7 +215,8 @@ output_dir_amr1_fixed_mnli2
 ---------------------------------------------------------------------
 
 ## QNLI
-### lsf.o223750671
+### lsf.o223859722
+#### DONE
 output_dir_amr0_qnli
 rm -rf ../../output_dir_amr0_qnli
 
@@ -222,15 +234,18 @@ python train.py \
     --gpus 1 --numworkers 4 --static_embeddings 0 --fixed_encoder 0 \
     --amr_version 0
 
-### lsf.o223750789
+### lsf.o223860196
+#### DONE
 output_dir_amr0_qnli2
 
-### lsf.o223750794
+### lsf.o223860315
+#### DONE
 output_dir_amr0_qnli3
 
 
 
-### lsf.o223750849
+### lsf.o223860360
+#### DONE
 output_dir_amr0_static_qnli
 rm -rf ../../output_dir_amr0_static_qnli
 
@@ -249,12 +264,14 @@ python train.py \
     --amr_version 0
 
 
-### lsf.o223750858
+### lsf.o223860384
+#### DONE
 output_dir_amr0_static_qnli2
 
 
 
-### lsf.o223750880
+### lsf.o223860415
+#### DONE
 output_dir_amr0_fixed_qnli
 rm -rf ../../output_dir_amr0_fixed_qnli
 
@@ -272,12 +289,14 @@ python train.py \
     --gpus 1 --numworkers 3 --static_embeddings 0 --fixed_encoder 1 \
     --amr_version 0
 
-### lsf.o223750883
+### lsf.o223860436
+#### DONE
 output_dir_amr0_fixed_qnli2
 
 
 
-### lsf.o223750950
+### lsf.o223860473
+#### DONE
 output_dir_amr1_qnli
 rm -rf ../../output_dir_amr1_qnli
 
@@ -296,15 +315,18 @@ python train.py \
     --amr_version 1
 
 
-### lsf.o223750954
+### lsf.o223860494
+#### RUNNING (epoch 11)
 output_dir_amr1_qnli2
 
-### lsf.o223750956
+### lsf.o223860514
+#### RUNNING (epoch 11)
 output_dir_amr1_qnli3
 
 
 
-### lsf.o223750965
+### lsf.o223860538
+#### RUNNING (epoch 12)
 output_dir_amr1_static_qnli
 rm -rf ../../output_dir_amr1_static_qnli
 
@@ -322,12 +344,12 @@ python train.py \
     --gpus 1 --numworkers 3 --static_embeddings 1 --fixed_encoder 0 \
     --amr_version 1
 
-### lsf.o223750969
+### lsf.o223860558              TODOOOO
 output_dir_amr1_static_qnli2
 
 
 
-### lsf.o223750985
+### lsf.o223860601              TODOOOO
 output_dir_amr1_fixed_qnli
 rm -rf ../../output_dir_amr1_fixed_qnli
 
@@ -346,7 +368,7 @@ python train.py \
     --amr_version 1
 
 
-### lsf.o223751009
+### lsf.o223860606              TODOOOO
 output_dir_amr1_fixed_qnli2
 
 

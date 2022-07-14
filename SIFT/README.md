@@ -1,3 +1,68 @@
+# Towards a Deeper Understanding of Semantic Comprehension in Language Models Paired with Semantic Graphs
+
+
+## Reproducibility Instructions:
+
+### Required packages (euler)
+
+module load gcc/8.2.0 python_gpu/3.9.9
+
+pip install --user pydantic==1.8.2 \
+pip install --user tqdm pytorch-lightning numpy notebook jupyter amrlib penman cached-property unidecode datasets \
+pip install --user allennlp-models allennlp \
+pip install --user transformers tokenizers \
+pip install --user dgl-cu113 dglgo -f https://data.dgl.ai/wheels/dgl_cu113-0.8.1-cp39-cp39-manylinux1_x86_64.whl \
+pip install --user torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113 \
+pip install --user rdflib==4.2.2 \
+
+
+### required transformers:
+
+possibly need to download the required pretrained transformers from huggingface since the internet connection required by the transformers library may not work on euler
+
+https://huggingface.co/roberta-base/tree/main \
+https://huggingface.co/roberta-large/tree/main
+
+
+### Data
+
+
+### Graphs
+
+
+### Training
+
+For training we used the euler_run.sh file which we changed ever so slightly for the different training runs.
+
+Things to change:
+- ensure that the output directory does not exist already by adapting the rm -rf to the same dir as the --output_dir flag
+- set the --numworkers to the number of dataloader workers (however we noticed that there exists some bug for numworkers != 0 which occurs for the larger datasets where one worker can crash leading to the entire run failing)
+- if you want to use the static embededing version of the model set --static_embeddings 1 otherwise set it to 0
+- if you want to use the fixed encoder version of the model set --fixed_encoder 1 otherwise set it to 0
+- set --formalism to either dm or amr depending on which model you want to train
+- set --amr_version 0 to train the model with AMRv0 otherwise set to 1 for AMRv1
+- set --task to the desired task (we used qnli, rte and mnli but other glue datasets should also work if the data and graphs exist)
+- set --data_dir according to task and relative position of data to euler_run.sh ../../data/glue_data/QNLI
+- set --model_name_or_path to the huggingface transformer model name if internet access works otherwise need to point to directory containing the pretrained transformer files available on huggingface.. /cluster/scratch/makleine/CSNLP/models/huggingface_models/roberta_base
+
+NOTE:
+- ensure that enough memory is available for qnli and rte about 40GB should be enough for the AMR case, while for the mnli somewhere in the range of 100-120GB of memory are required
+- ensure that the GPU has enough memory, for non mnli it should probably be 24GB while for mnli it has to be > 34GB
+- the feature file built upon the formalism graphs and the metadata file will only be created if they don't already exist, hence if this code is supposed ot run ensure that the files are deleted!
+
+#### example submission for mnli task with amr. it will take about 12h to train 20 epochs
+bsub -G s_stud_infk -W 24:00 -n 5 -R "rusage[mem=24000,ngpus_excl_p=1]" -R "select[gpu_mtotal0>=30000]" < euler_run.sh
+#### example submission for rte or qnli task with amr. it will take significantly less than 12h to train 20 epochs on those
+bsub -G s_stud_infk -W 24:00 -n 5 -R "rusage[mem=10000,ngpus_excl_p=1]" -R "select[gpu_mtotal0>=20000]" < euler_run.sh 
+
+
+### 
+
+
+
+
+
+
 # Infusing Finetuning with Semantic Dependencies
 
 The official PyTorch implementation for our paper:
